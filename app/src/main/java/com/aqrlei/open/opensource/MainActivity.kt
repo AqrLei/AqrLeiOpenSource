@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.aqrlei.open.utils.qrcode.*
 import com.aqrlei.open.views.banner.BannerView
@@ -21,26 +22,40 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val listener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(p0: TabLayout.Tab?) {
+            when (p0?.position) {
+                0 -> {
+                    labelTl.removeOnTabSelectedListener(this)
+                    bannerTest()
+                }
+                1 -> qrCodeTest()
+            }
+        }
+
+        override fun onTabReselected(p0: TabLayout.Tab?) {
+
+        }
+
+        override fun onTabUnselected(p0: TabLayout.Tab?) {
+
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        labelTl.apply {
+       labelTl.apply {
             addTab(newTab().setText("Banner"))
             addTab(newTab().setText("QRCode"))
-            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(p0: TabLayout.Tab?) {
-                    when (p0?.position) {
-                        0 -> bannerTest()
-                        1 -> qrCodeTest()
-                    }
-                }
+        }
+        addTabListenerTv.setOnClickListener {
+            labelTl.addOnTabSelectedListener(listener)
+            Toast.makeText(this,"add done",Toast.LENGTH_SHORT).show()
+        }
+        removeTabListenerTv.setOnClickListener {
+            labelTl.removeOnTabSelectedListener(listener)
+            Toast.makeText(this,"remove done",Toast.LENGTH_SHORT).show()
 
-                override fun onTabReselected(p0: TabLayout.Tab?) {
-                }
-
-                override fun onTabUnselected(p0: TabLayout.Tab?) {
-                }
-            })
         }
     }
 
@@ -119,7 +134,6 @@ class MainActivity : AppCompatActivity() {
                 bannerList
         )))
     }
-
     inner class BannerViewAdapterHolder(adapter: BannerView.BannerViewAdapter<Int>)
         : BannerView.BannerViewAdapterHolder<Int>(adapter)
 
