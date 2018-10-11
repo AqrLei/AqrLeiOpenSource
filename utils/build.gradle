@@ -48,3 +48,91 @@ dependencies {
     testImplementation deps.test.junit
 
 }
+
+def siteUrl = 'https://github.com/AqrLei/OpenSource'
+
+def gitUrl = 'https://github.com/AqrLei/OpenSource.git'
+
+def libName = "utils"
+
+
+group = "com.aqrlei.opensource"
+
+version = "0.0.1"
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        configuration = configurations.archives
+
+        pom {
+            project {
+                packaging 'aar'
+                name 'utils'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'aqrlei'
+                        name 'AqrLei'
+                        email 'aqrdeveloper@gmail.com'
+                    }
+                }
+                scm {
+                    connection "scm:git:git://github.com/AqrLei/OpenSource.git"
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task androidSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.source
+    classifier = 'sources'
+}
+
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/documentation"
+}
+task androidJavadocsJar(type: Jar, dependsOn: dokkaJavadoc) {
+    classifier = 'javadoc'
+    from dokkaJavadoc.outputDirectory
+}
+
+artifacts {
+    archives androidJavadocsJar
+    archives androidSourcesJar
+}
+
+tasks.withType(Javadoc) {//防止编码问题
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "openSource"
+        name = libName
+        desc = 'utils'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
