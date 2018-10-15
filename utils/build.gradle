@@ -43,6 +43,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation deps.androidx.fragment
     implementation deps.kotlin.stdlib
     implementation deps.zxing.core
     testImplementation deps.test.junit

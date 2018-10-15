@@ -30,6 +30,7 @@ versions.android_gradle_plugin = "3.2.0"
 versions.appcompat = "1.0.0"
 versions.constraint = "2.0.0-alpha2"
 versions.material = "1.0.0"
+versions.fragment ="1.0.0"
 
 versions.junit = "4.12"
 versions.test_runner = "1.1.0-beta02"
@@ -56,6 +57,7 @@ deps.test = test
 def androidx = [:]
 androidx.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
 androidx.constraint = "androidx.constraintlayout:constraintlayout:$versions.constraint"
+androidx.fragment = "androidx.fragment:fragment:$versions.fragment"
 deps.androidx  = androidx
 
 
