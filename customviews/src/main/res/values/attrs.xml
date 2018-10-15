@@ -6,4 +6,23 @@
         <attr name="interval" format="integer" />
         <attr name="defaultBanner" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="RoundBar">
+        <attr name="backgroundColor" format="color"/>
+        <attr name="progressColor" format="color"/>
+        <attr name="startDegree" format="float"/>
+        <attr name="sweepDegree" format="float"/>
+        <attr name="rotateDegree" format="float"/>
+        <attr name="animationVelocity" format="float"/>
+        <attr name="radius" format="dimension"/>
+        <attr name="roundWidth" format="dimension"/>
+        <attr name="maxProgress" format="float"/>
+        <attr name="progress" format="float"/>
+        <attr name="capStyle">
+            <enum name="butt" value="0"/>
+            <enum name="round" value="1"/>
+            <enum name="square" value="2"/>
+        </attr>
+        <attr name="useGradientColor" format="boolean"/>
+        <attr name="openAnimation" format="boolean"/>
+    </declare-styleable>
 </resources>
