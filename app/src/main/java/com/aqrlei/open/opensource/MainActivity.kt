@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.aqrlei.open.utils.qrcode.*
+import com.aqrlei.open.views.CustomDialog
 import com.aqrlei.open.views.CustomPopWindow
 import com.aqrlei.open.views.banner.BannerView
 import com.google.android.material.tabs.TabLayout
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 1 -> qrCodeTest()
                 2 -> customPopWindowTest()
+                3 -> customDialogTest()
             }
         }
 
@@ -52,6 +54,7 @@ class MainActivity : AppCompatActivity() {
             addTab(newTab().setText("Banner"))
             addTab(newTab().setText("QRCode"))
             addTab(newTab().setText("CustomPop"))
+            addTab(newTab().setText("CustomDialog"))
         }
         addTabListenerTv.setOnClickListener {
             labelTl.addOnTabSelectedListener(listener)
@@ -148,6 +151,22 @@ class MainActivity : AppCompatActivity() {
                         CustomPopWindow.PopContent(this.resources.getDrawable(R.mipmap.ic_launcher), "测试一"),
                         CustomPopWindow.PopContent(this.resources.getDrawable(R.mipmap.ic_launcher_round), "测试二"),
                         CustomPopWindow.PopContent(null, "测试三")), labelTl, Gravity.TOP)
+    }
+
+    private fun customDialogTest() {
+        CustomDialog.newInstance()
+                .setOutCancelable(false)
+                .configureTitle("提示")
+                .configureMsg("联系客户签约\n dddddd")
+                .configureNegativeButton("稍后联系")
+                .configurePositiveButton(
+                        text = "立即联系",
+                        textColor = "#1b8fe6",
+                        action = {
+                            Toast.makeText(this, "测试", Toast.LENGTH_SHORT).show()
+                        })
+                .setOutCancelable(false)
+                .show(supportFragmentManager)
     }
 
     private fun bannerTest() {
