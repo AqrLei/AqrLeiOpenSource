@@ -48,20 +48,16 @@ class CustomPopWindow private constructor(
             PopCorner.TOP -> {
                 with(rootView.topIv) {
                     visibility = View.VISIBLE
-                    rootView.additionalTopV.visibility = View.VISIBLE
                     setImageResource(R.mipmap.ic_arrow_top)
                 }
             }
             PopCorner.BOTH_NOT_SHOW -> {
                 rootView.bottomIv.visibility = View.GONE
                 rootView.topIv.visibility = View.GONE
-                rootView.additionalTopV.visibility = View.GONE
-                rootView.additionalBottomV.visibility = View.GONE
             }
             PopCorner.BOTTOM -> {
                 with(rootView.bottomIv) {
                     visibility = View.VISIBLE
-                    rootView.additionalBottomV.visibility = View.VISIBLE
                     setImageResource(R.mipmap.ic_arrow_bottom)
                 }
             }
@@ -111,6 +107,9 @@ class CustomPopWindow private constructor(
                 }
                 setCompoundDrawables(drawable, null, null, null)
             }
+            if (position == data.size - 1) {
+                holder.itemView.dividerBottom.visibility = View.GONE
+            }
         }
     }
 
@@ -138,13 +137,13 @@ class CustomPopWindow private constructor(
     }
 
     private fun setShowGravity(gravity: Int, anchorHeight: Int) {
-        val topLp = rootView.topFl.layoutParams as? ConstraintLayout.LayoutParams
+        val topLp = rootView.topIv.layoutParams as? ConstraintLayout.LayoutParams
         val bothRightMargin = DensityUtil.dip2px(popWindowConfigure.arrowMarginRight)
         topLp?.apply {
             verticalBias = if (gravity == Gravity.TOP) 0.0F else 1.0F
             rightMargin = bothRightMargin
         }
-        val bottomLp = rootView.bottomFl.layoutParams as? ConstraintLayout.LayoutParams
+        val bottomLp = rootView.bottomIv.layoutParams as? ConstraintLayout.LayoutParams
         bottomLp?.apply {
             rightMargin = bothRightMargin
         }
@@ -158,8 +157,8 @@ class CustomPopWindow private constructor(
             }
         }
 
-        rootView.topFl.layoutParams = topLp
-        rootView.bottomFl.layoutParams = bottomLp
+        rootView.topIv.layoutParams = topLp
+        rootView.bottomIv.layoutParams = bottomLp
     }
 
     inner class CustomPopRecyclerViewHolder(view: View) : RecyclerView.ViewHolder(view)
