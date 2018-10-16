@@ -52,8 +52,8 @@ class CustomPopWindow private constructor(
                 }
             }
             PopCorner.BOTH_NOT_SHOW -> {
-                rootView.bottomIv.visibility = View.GONE
-                rootView.topIv.visibility = View.GONE
+                rootView.bottomIv.visibility = View.INVISIBLE
+                rootView.topIv.visibility = View.INVISIBLE
             }
             PopCorner.BOTTOM -> {
                 with(rootView.bottomIv) {

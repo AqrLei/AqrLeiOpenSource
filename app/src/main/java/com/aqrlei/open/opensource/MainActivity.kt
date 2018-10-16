@@ -8,12 +8,14 @@ import android.graphics.Canvas
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.aqrlei.open.utils.qrcode.*
+import com.aqrlei.open.views.CustomPopWindow
 import com.aqrlei.open.views.banner.BannerView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
                     bannerTest()
                 }
                 1 -> qrCodeTest()
+                2 -> customPopWindowTest()
             }
         }
 
@@ -41,20 +44,22 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-       labelTl.apply {
+        labelTl.apply {
             addTab(newTab().setText("Banner"))
             addTab(newTab().setText("QRCode"))
+            addTab(newTab().setText("CustomPop"))
         }
         addTabListenerTv.setOnClickListener {
             labelTl.addOnTabSelectedListener(listener)
-            Toast.makeText(this,"add done",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "add done", Toast.LENGTH_SHORT).show()
         }
         removeTabListenerTv.setOnClickListener {
             labelTl.removeOnTabSelectedListener(listener)
-            Toast.makeText(this,"remove done",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "remove done", Toast.LENGTH_SHORT).show()
 
         }
     }
@@ -120,6 +125,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun customPopWindowTest() {
+        CustomPopWindow.Builder
+                .setPopCorner(CustomPopWindow.PopCorner.BOTH_NOT_SHOW)
+                .addPopWindowConfigure(CustomPopWindow.PopConfigure(
+                        arrowMarginRight = 14F,
+                        marginRight = 8F,
+                        marginTop = 38F,
+                        itemPaddingLeft = 25F,
+                        itemPaddingTop = 7F,
+                        itemPaddingRight = 35F,
+                        itemPaddingBottom = 7F,
+                        itemDrawablePadding = 6F,
+                        itemTextSize = 14F
+                ))
+
+                .addItemAction { i, popContent, _ ->
+                    Log.d("Test", "pos: $i\t data: $popContent ")
+                }
+                .builder(this)
+                .show(listOf(
+                        CustomPopWindow.PopContent(this.resources.getDrawable(R.mipmap.ic_launcher), "测试一"),
+                        CustomPopWindow.PopContent(this.resources.getDrawable(R.mipmap.ic_launcher_round), "测试二"),
+                        CustomPopWindow.PopContent(null, "测试三")), labelTl, Gravity.TOP)
+    }
 
     private fun bannerTest() {
         bannerCl.visibility = View.VISIBLE
@@ -134,6 +163,7 @@ class MainActivity : AppCompatActivity() {
                 bannerList
         )))
     }
+
     inner class BannerViewAdapterHolder(adapter: BannerView.BannerViewAdapter<Int>)
         : BannerView.BannerViewAdapterHolder<Int>(adapter)
 
