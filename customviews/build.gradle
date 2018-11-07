@@ -58,7 +58,7 @@ def libName = "customviews"
 
 group = "com.aqrlei.opensource"
 
-version = "0.0.3"
+version = "0.0.4"
 
 install {
     repositories.mavenInstaller {
