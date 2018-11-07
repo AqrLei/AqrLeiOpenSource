@@ -1,6 +1,7 @@
 package com.aqrlei.open.utils
 
-import java.util.*
+import kotlin.random.Random
+
 
 /**
  * @author  aqrLei on 2018/7/10
@@ -8,8 +9,7 @@ import java.util.*
 
 object MathUtil {
     fun random(minLimit: Int, maxLimit: Int): Int {
-        val random = Random()
         val temp = maxLimit - minLimit
-        return random.nextInt(temp) + minLimit
+        return Random.nextInt(temp) + minLimit
     }
 }
