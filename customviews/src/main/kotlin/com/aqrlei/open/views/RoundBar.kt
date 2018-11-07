@@ -247,14 +247,16 @@ class RoundBar @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is Bundle) {
             with(state) {
-                val bool = getBooleanArray(INSTANCE_BOOLEAN)
-                val degrees = getFloatArray(INSTANCE_DEGREE)
-                mIsOpenAnimation = bool[0]
-                mIsUseGradientColor = bool[1]
-                mStartDegree = degrees[0]
-                mSweepDegree = degrees[1]
-                mProgressDegree = degrees[2]
-                mRotateDegree = degrees[3]
+                getBooleanArray(INSTANCE_BOOLEAN)?.apply {
+                    mIsOpenAnimation = this[0]
+                    mIsUseGradientColor = this[1]
+                }
+                getFloatArray(INSTANCE_DEGREE)?.apply {
+                    mStartDegree = this[0]
+                    mSweepDegree = this[1]
+                    mProgressDegree = this[2]
+                    mRotateDegree = this[3]
+                }
                 super.onRestoreInstanceState(getParcelable(INSTANCE))
             }
             return

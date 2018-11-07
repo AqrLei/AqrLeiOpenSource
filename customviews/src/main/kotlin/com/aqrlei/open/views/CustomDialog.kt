@@ -42,7 +42,7 @@ class CustomDialog : DialogFragment() {
             val metrics = DisplayMetrics()
             activity?.windowManager?.defaultDisplay?.getMetrics(metrics)
             val width = (metrics.widthPixels * 0.75F).toInt()
-            dialog.window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
         }
     }
 
