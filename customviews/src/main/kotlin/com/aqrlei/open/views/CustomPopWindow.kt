@@ -1,6 +1,7 @@
 package com.aqrlei.open.views
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -42,7 +43,7 @@ class CustomPopWindow private constructor(
         rootView.contentRv.adapter = mAdapter
 
         (rootView.contentRv.layoutParams as? ConstraintLayout.LayoutParams)?.apply {
-            rightMargin = DensityUtil.dip2px(popWindowConfigure.marginRight)
+            rightMargin = dip2px(popWindowConfigure.marginRight)
         }
         when (popCorner) {
             PopCorner.TOP -> {
@@ -77,11 +78,11 @@ class CustomPopWindow private constructor(
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             val view = inflater.inflate(resId, parent, false)
             popWindowConfigure.run {
-                val paddingLeft = DensityUtil.dip2px(itemPaddingLeft)
-                val paddingTop = DensityUtil.dip2px(itemPaddingTop)
-                val paddingRight = DensityUtil.dip2px(itemPaddingRight)
-                val paddingBottom = DensityUtil.dip2px(itemPaddingBottom)
-                val drawablePadding = DensityUtil.dip2px(itemDrawablePadding)
+                val paddingLeft = dip2px(itemPaddingLeft)
+                val paddingTop = dip2px(itemPaddingTop)
+                val paddingRight = dip2px(itemPaddingRight)
+                val paddingBottom = dip2px(itemPaddingBottom)
+                val drawablePadding = dip2px(itemDrawablePadding)
                 view.popContentTv.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
                 view.popContentTv.compoundDrawablePadding = drawablePadding
             }
@@ -99,7 +100,7 @@ class CustomPopWindow private constructor(
                 text = data[position].subtitle
 
                 val length = popWindowConfigure.run {
-                    DensityUtil.dip2px(itemTextSize + itemPaddingBottom + itemPaddingTop)
+                    dip2px(itemTextSize + itemPaddingBottom + itemPaddingTop)
                 }
 
                 val drawable = data[position].icon?.apply {
@@ -138,7 +139,7 @@ class CustomPopWindow private constructor(
 
     private fun setShowGravity(gravity: Int, anchorHeight: Int) {
         val topLp = rootView.topIv.layoutParams as? ConstraintLayout.LayoutParams
-        val bothRightMargin = DensityUtil.dip2px(popWindowConfigure.arrowMarginRight)
+        val bothRightMargin = dip2px(popWindowConfigure.arrowMarginRight)
         topLp?.apply {
             verticalBias = if (gravity == Gravity.TOP) 0.0F else 1.0F
             rightMargin = bothRightMargin
@@ -149,11 +150,11 @@ class CustomPopWindow private constructor(
         }
         if (gravity == Gravity.TOP) {
             topLp?.apply {
-                topMargin = DensityUtil.dip2px(popWindowConfigure.marginTop) + anchorHeight
+                topMargin = dip2px(popWindowConfigure.marginTop) + anchorHeight
             }
         } else {
             bottomLp?.apply {
-                bottomMargin = DensityUtil.dip2px(popWindowConfigure.marginTop) + anchorHeight
+                bottomMargin = dip2px(popWindowConfigure.marginTop) + anchorHeight
             }
         }
 
@@ -205,6 +206,11 @@ class CustomPopWindow private constructor(
         fun builder(context: Context): CustomPopWindow {
             return CustomPopWindow(context, popConfigure, popCorner, itemAction)
         }
+    }
+
+    fun dip2px(dpValue: Float): Int {
+        val density: Float = Resources.getSystem().displayMetrics.density
+        return (0.5f + dpValue * density).toInt()
     }
 }
 

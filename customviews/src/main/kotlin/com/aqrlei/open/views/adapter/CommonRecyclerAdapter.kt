@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
  */
 abstract class CommonRecyclerAdapter<T>(
         context: Context,
-        private val resId: Int,
+        @LayoutRes private val resId: Int,
         protected val data: List<T>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
