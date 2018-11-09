@@ -25,6 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_custom_menu_background"
+        android:overScrollMode="never"
+        android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/bottomIv"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
