@@ -5,7 +5,7 @@
     android:id="@+id/outsideCl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#b0000000">
+    android:background="@color/custom_translucent">
 
     <ImageView
         android:id="@+id/topIv"
@@ -24,7 +24,7 @@
         android:id="@+id/contentRv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_custom_window_background"
+        android:background="@drawable/shape_custom_menu_background"
         app:layout_constraintBottom_toTopOf="@+id/bottomIv"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"

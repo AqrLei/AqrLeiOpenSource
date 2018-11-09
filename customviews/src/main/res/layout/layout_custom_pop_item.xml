@@ -16,5 +16,5 @@
         android:id="@+id/dividerBottom"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#ffe5e5e5" />
+        android:background="@color/custom_view_divider" />
 </LinearLayout>

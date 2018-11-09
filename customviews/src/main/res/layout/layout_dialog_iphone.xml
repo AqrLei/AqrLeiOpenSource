@@ -14,7 +14,7 @@
         android:paddingLeft="15dp"
         android:paddingTop="15dp"
         android:paddingRight="15dp"
-        android:textColor="#ff000000"
+        android:textColor="@android:color/black"
         android:textSize="18dp"
         android:textStyle="bold"
         android:visibility="gone"
@@ -29,7 +29,7 @@
         android:paddingLeft="15dp"
         android:paddingTop="15dp"
         android:paddingRight="15dp"
-        android:textColor="#ff000000"
+        android:textColor="@android:color/black"
         android:textSize="16dp"
         android:visibility="gone"
         tools:text="内容"
@@ -42,7 +42,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#ffc6c6c6" />
+        android:background="@color/custom_view_deep_divider" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
             android:layout_weight="1"
             android:background="@drawable/selector_dialog_left_button"
             android:gravity="center"
-            android:textColor="#ff333333"
+            android:textColor="@color/custom_view_text"
             android:textSize="16dp"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -65,7 +65,7 @@
             android:id="@+id/dividerView"
             android:layout_width="1px"
             android:layout_height="43dp"
-            android:background="#ffc6c6c6"
+            android:background="@color/custom_view_deep_divider"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -76,7 +76,7 @@
             android:layout_weight="1"
             android:background="@drawable/selector_dialog_right_button"
             android:gravity="center"
-            android:textColor="#ff333333"
+            android:textColor="@color/custom_view_text"
             android:textSize="16dp"
             android:visibility="gone"
             tools:visibility="visible" />

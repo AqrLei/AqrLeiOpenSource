@@ -5,7 +5,7 @@
         <shape android:shape="oval">
             <size android:width="5dp"
                   android:height="5dp"/>
-            <solid android:color="#ffffffff"/>
+            <solid android:color="@android:color/white"/>
         </shape>
     </item>
 
@@ -13,7 +13,7 @@
         <shape android:shape="oval">
             <size android:width="5dp"
                   android:height="5dp"/>
-            <solid android:color="#ff1b8fe6"/>
+            <solid android:color="@color/custom_normal_blue"/>
         </shape>
     </item>
 
