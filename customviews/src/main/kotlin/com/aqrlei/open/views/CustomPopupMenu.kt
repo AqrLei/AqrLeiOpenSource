@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.layout_custom_pop_item.view.*
 /**
  * @author aqrlei on 2018/10/10
  */
-class CustomPopWindow private constructor(
+class CustomPopupMenu private constructor(
         context: Context,
         private val popWindowConfigure: PopConfigure,
         private val popCorner: PopCorner,
@@ -203,8 +203,8 @@ class CustomPopWindow private constructor(
             return this
         }
 
-        fun builder(context: Context): CustomPopWindow {
-            return CustomPopWindow(context, popConfigure, popCorner, itemAction)
+        fun builder(context: Context): CustomPopupMenu {
+            return CustomPopupMenu(context, popConfigure, popCorner, itemAction)
         }
     }
 

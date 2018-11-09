@@ -1,4 +1,4 @@
-package com.aqrlei.open.views
+package com.aqrlei.open.views.dialog
 
 import android.graphics.Color
 import android.os.Bundle
@@ -12,17 +12,18 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import kotlinx.android.synthetic.main.layout_dialog_custom.*
+import com.aqrlei.open.views.R
+import kotlinx.android.synthetic.main.layout_dialog_iphone.*
 
 
 /**
  * @author aqrlei on 2018/10/15
  */
-class CustomDialog : DialogFragment() {
+class IPhoneStyleDialog : DialogFragment() {
 
     companion object {
-        private const val TAG = "customDialog"
-        fun newInstance() = CustomDialog()
+        private const val TAG = "IPhoneStyleDialog"
+        fun newInstance() = IPhoneStyleDialog()
     }
 
     private var isOutCancelable: Boolean = false
@@ -48,38 +49,38 @@ class CustomDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, R.style.DialogStyle)
+        setStyle(STYLE_NO_FRAME, R.style.IPhoneDialogStyle)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.layout_dialog_custom, container, false)
+        return inflater.inflate(R.layout.layout_dialog_iphone, container, false)
     }
 
-    fun configureTitle(text: String, textColor: String = "", textSize: Float = 0F): CustomDialog {
+    fun configureTitle(text: String, textColor: String = "", textSize: Float = 0F): IPhoneStyleDialog {
         titleConfigure = TextConfigure(text, textColor, textSize)
         return this
     }
 
-    fun configureMsg(text: String, textColor: String = "", textSize: Float = 0F): CustomDialog {
+    fun configureMsg(text: String, textColor: String = "", textSize: Float = 0F): IPhoneStyleDialog {
         msgConfigure = TextConfigure(text, textColor, textSize)
         return this
     }
 
-    fun configureNegativeButton(text: String, textColor: String = "", textSize: Float = 0F, action: ((View) -> Unit)? = null): CustomDialog {
+    fun configureNegativeButton(text: String, textColor: String = "", textSize: Float = 0F, action: ((View) -> Unit)? = null): IPhoneStyleDialog {
         negativeAction = action
         isNegativeButtonShow = true
         negativeButtonConfigure = TextConfigure(text, textColor, textSize)
         return this
     }
 
-    fun configurePositiveButton(text: String, textColor: String = "", textSize: Float = 0F, action: ((View) -> Unit)? = null): CustomDialog {
+    fun configurePositiveButton(text: String, textColor: String = "", textSize: Float = 0F, action: ((View) -> Unit)? = null): IPhoneStyleDialog {
         positiveAction = action
         isPositiveButtonShow = true
         positiveButtonConfigure = TextConfigure(text, textColor, textSize)
         return this
     }
 
-    fun setOutCancelable(cancelable: Boolean): CustomDialog {
+    fun setOutCancelable(cancelable: Boolean): IPhoneStyleDialog {
         isOutCancelable = cancelable
         return this
     }

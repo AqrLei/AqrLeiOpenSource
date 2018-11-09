@@ -15,8 +15,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.aqrlei.open.utils.qrcode.*
-import com.aqrlei.open.views.CustomDialog
-import com.aqrlei.open.views.CustomPopWindow
+import com.aqrlei.open.views.dialog.IPhoneStyleDialog
+import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             addTab(newTab().setText("Banner"))
             addTab(newTab().setText("QRCode"))
             addTab(newTab().setText("CustomPop"))
-            addTab(newTab().setText("CustomDialog"))
+            addTab(newTab().setText("IPhoneStyleDialog"))
         }
         addTabListenerTv.setOnClickListener {
             labelTl.addOnTabSelectedListener(listener)
@@ -129,9 +129,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun customPopWindowTest() {
-        CustomPopWindow.Builder
-                .setPopCorner(CustomPopWindow.PopCorner.BOTH_NOT_SHOW)
-                .addPopWindowConfigure(CustomPopWindow.PopConfigure(
+        CustomPopupMenu.Builder
+                .setPopCorner(CustomPopupMenu.PopCorner.BOTH_NOT_SHOW)
+                .addPopWindowConfigure(CustomPopupMenu.PopConfigure(
                         arrowMarginRight = 14F,
                         marginRight = 8F,
                         marginTop = 38F,
@@ -148,13 +148,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 .builder(this)
                 .show(listOf(
-                        CustomPopWindow.PopContent(this.resources.getDrawable(R.mipmap.ic_launcher), "测试一"),
-                        CustomPopWindow.PopContent(this.resources.getDrawable(R.mipmap.ic_launcher_round), "测试二"),
-                        CustomPopWindow.PopContent(null, "测试三")), labelTl, Gravity.TOP)
+                        CustomPopupMenu.PopContent(this.resources.getDrawable(R.mipmap.ic_launcher), "测试一"),
+                        CustomPopupMenu.PopContent(this.resources.getDrawable(R.mipmap.ic_launcher_round), "测试二"),
+                        CustomPopupMenu.PopContent(null, "测试三")), labelTl, Gravity.TOP)
     }
 
     private fun customDialogTest() {
-        CustomDialog.newInstance()
+        IPhoneStyleDialog.newInstance()
                 .setOutCancelable(false)
                 .configureTitle("提示")
                 .configureMsg("联系客户签约\n dddddd")
