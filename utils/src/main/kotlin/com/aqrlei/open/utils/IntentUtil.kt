@@ -33,7 +33,6 @@ object IntentUtil {
 
     /**
      * 跳转到设置界面
-     *
      * @param activity
      * @param reqCode
      */
@@ -48,8 +47,6 @@ object IntentUtil {
 
     /**
      * 发送短信
-     *
-     * @param context
      * @param tel     电话uri
      * @param content 短信内容
      */
@@ -63,9 +60,6 @@ object IntentUtil {
 
     /**
      * 跳转到拨号界面
-     *
-     * @param context 上下文
-     * @param tel     电话uri
      */
     fun toDialApp(context: Context, tel: Uri) {
         val intent = Intent(Intent.ACTION_DIAL, tel)
@@ -76,8 +70,6 @@ object IntentUtil {
 
     /**
      * 跳转到市场app
-     *
-     * @param context
      */
     fun toMarketApp(context: Context) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.packageName))
@@ -88,7 +80,6 @@ object IntentUtil {
 
     /**
      * 跳转到系统相机 ，不需要Camera权限
-     *
      * @param fileUri 拍摄图片存放的位置
      */
     fun toCameraApp(context: Activity, fileUri: Uri, reqCode: Int) {
@@ -101,8 +92,6 @@ object IntentUtil {
 
     /**
      * 跳系统图库
-     *
-     * @param activity
      */
     fun toGetContentPhoto(activity: Activity, reqCode: Int) {
         val intent = Intent()
@@ -121,10 +110,7 @@ object IntentUtil {
 
     /**
      * 跳转到联系人
-     *
-     * @param context
      * @param fragment
-     * @param reqCode
      */
     fun toContactApp(context: Activity, fragment: Fragment?, reqCode: Int) {
         val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
