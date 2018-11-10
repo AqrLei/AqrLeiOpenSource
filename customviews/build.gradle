@@ -43,6 +43,7 @@ dependencies {
     implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
     implementation deps.androidx.constraint
+    implementation deps.material
     testImplementation deps.test.junit
 
 }

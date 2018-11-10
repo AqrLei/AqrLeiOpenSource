@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="custom_view_press">#c5c5c5</color>
+    <color name="custom_view_google_dialog">#f5f5f5</color>
     <color name="custom_view_normal">#eeeeee</color>
     <color name="custom_view_divider">#e5e5e5</color>
     <color name="custom_view_deep_divider">#c6c6c6</color>

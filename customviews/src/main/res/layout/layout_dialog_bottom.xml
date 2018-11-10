@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/custom_view_google_dialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialogTitleTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:textColor="@color/custom_view_text"
+            tools:text="@string/dialog_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/contentRv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp">
+
+            <Button
+                android:id="@+id/neutralButton"
+                style="@style/BottomDialogButtonStyle"
+                app:layout_constraintLeft_toLeftOf="parent"
+                tools:text="@string/dialog_neutral" />
+            <Button
+                android:id="@+id/negativeButton"
+                style="@style/BottomDialogButtonStyle"
+                app:layout_constraintRight_toLeftOf="@+id/positiveButton"
+                tools:text="@string/dialog_cancel" />
+            <Button
+                android:id="@+id/positiveButton"
+                style="@style/BottomDialogButtonStyle"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="@string/dialog_ok" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
