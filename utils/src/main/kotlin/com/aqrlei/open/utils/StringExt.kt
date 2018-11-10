@@ -119,7 +119,6 @@ fun SpannableString.url(textView: TextView, url: String, inclustart: Int, exclue
     val span = URLSpan(url)
     this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
-
 }
 
 /**
@@ -132,7 +131,6 @@ fun SpannableString.quote(quoteColor: Int,stripeWidth:Float,gapWidth:Float = 0F,
     val span = QuoteSpan(quoteColor,DensityUtil.dip2px(stripeWidth),DensityUtil.dip2px(gapWidth))
     this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
-
 }
 
 /**
@@ -176,7 +174,6 @@ fun SpannableString.imageMargin(drawable: Drawable, margin: Float, inclustart: I
     val span = DrawableMarginSpan(drawable,DensityUtil.dip2px(margin))
     this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
-
 }
 
 /**
