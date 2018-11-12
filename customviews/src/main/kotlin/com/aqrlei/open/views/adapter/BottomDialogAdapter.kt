@@ -1,6 +1,7 @@
 package com.aqrlei.open.views.adapter
 
 import android.content.Context
+import android.view.View
 import androidx.annotation.LayoutRes
 
 /**
@@ -12,4 +13,5 @@ abstract class BottomDialogAdapter<T>(context: Context,
     var positiveAction: (() -> Nothing)? = null
     var negativeAction: (() -> Nothing)? = null
     var neutralAction: (() -> Nothing)? = null
+
 }

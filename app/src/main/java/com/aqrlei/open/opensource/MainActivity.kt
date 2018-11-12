@@ -18,6 +18,7 @@ import com.aqrlei.open.utils.qrcode.*
 import com.aqrlei.open.views.dialog.IPhoneStyleDialog
 import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
+import com.aqrlei.open.views.dialog.BottomDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
 import kotlinx.android.synthetic.main.act_layout_qrcode.*
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
                 1 -> qrCodeTest()
                 2 -> customPopWindowTest()
                 3 -> customDialogTest()
+                4 -> bottomDialogTest()
             }
         }
 
@@ -55,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             addTab(newTab().setText("QRCode"))
             addTab(newTab().setText("CustomPop"))
             addTab(newTab().setText("IPhoneStyleDialog"))
+            addTab(newTab().setText("BottomDialog"))
         }
         addTabListenerTv.setOnClickListener {
             labelTl.addOnTabSelectedListener(listener)
@@ -67,6 +70,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun bottomDialogTest(){
+        BottomDialog.newInstance().show(supportFragmentManager)
+    }
     private fun qrCodeTest() {
         bannerCl.visibility = View.GONE
         qrcodeCl.visibility = View.VISIBLE

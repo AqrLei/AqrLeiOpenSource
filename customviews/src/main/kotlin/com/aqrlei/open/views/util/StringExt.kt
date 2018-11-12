@@ -1,4 +1,4 @@
-package com.aqrlei.open.utils
+package com.aqrlei.open.views.util
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -20,36 +20,47 @@ fun String.toSpannableString() = SpannableString(this)
  * @param inclustart 要操作的字符串的起始位置，包含
  * @param excluend 要操作字符串的末尾位置，不包含
  */
-fun SpannableString.foregroundColor(color: Int, inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.foregroundColor(color: Int, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val colorSpan = ForegroundColorSpan(color)
-    this.setSpan(colorSpan,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    this.setSpan(colorSpan, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
 
 /**
  * 设置背景色
  * */
-fun SpannableString.backgroundColor(color: Int, inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.backgroundColor(color: Int, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val colorSpan = BackgroundColorSpan(color)
-    this.setSpan(colorSpan,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    this.setSpan(colorSpan, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
 
 /**
  * 改变字体大小
- * @param[size] 字体的相对大小
+ * @param[relativeSize] 字体的相对大小
  * */
-fun SpannableString.relativeSize(size: Float, inclustart: Int, excluend: Int): SpannableString {
-    val sizeSpan = RelativeSizeSpan(size)
-    this.setSpan(sizeSpan,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+fun SpannableString.relativeSize(relativeSize: Float, inclustart: Int, excluend: Int): SpannableString {
+    val sizeSpan = RelativeSizeSpan(relativeSize)
+    this.setSpan(sizeSpan, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
+
+/**
+ * 改变字体大小
+ * @param[absoluteSize]  字体的绝对大小，单位:DP
+ */
+fun SpannableString.absoluteSize(absoluteSize: Float, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
+    val span = AbsoluteSizeSpan(DensityUtil.dip2px(absoluteSize))
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    return this
+}
+
 /**
  * 设置删除线
  */
 fun SpannableString.strikeThrough(inclustart: Int, excluend: Int): SpannableString {
     val strikeSpan = StrikethroughSpan()
-    this.setSpan(strikeSpan,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    this.setSpan(strikeSpan, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
 
@@ -58,7 +69,7 @@ fun SpannableString.strikeThrough(inclustart: Int, excluend: Int): SpannableStri
  */
 fun SpannableString.underline(inclustart: Int, excluend: Int): SpannableString {
     val span = UnderlineSpan()
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
 
@@ -67,24 +78,26 @@ fun SpannableString.underline(inclustart: Int, excluend: Int): SpannableString {
  */
 fun SpannableString.superscript(inclustart: Int, excluend: Int): SpannableString {
     val span = SuperscriptSpan()
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
+
 /**
  * 设置下标
  */
 fun SpannableString.subscript(inclustart: Int, excluend: Int): SpannableString {
     val span = SubscriptSpan()
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
+
 /**
  * 改变字体样式
  * @param typeFace  [android.graphics.Typeface]
  * */
 fun SpannableString.style(typeFace: Int, inclustart: Int, excluend: Int): SpannableString {
     val span = StyleSpan(typeFace)
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
 
@@ -117,7 +130,7 @@ fun SpannableString.url(textView: TextView, url: String, inclustart: Int, exclue
     textView.movementMethod = LinkMovementMethod.getInstance()
     textView.highlightColor = textHighlightColor
     val span = URLSpan(url)
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
 
@@ -127,9 +140,9 @@ fun SpannableString.url(textView: TextView, url: String, inclustart: Int, exclue
  * @param stripeWidth 竖线的宽度，单位: DP
  * @param gapWidth 竖线与文字的距离，单位: DP
  */
-fun SpannableString.quote(quoteColor: Int,stripeWidth:Float,gapWidth:Float = 0F, inclustart: Int, excluend: Int): SpannableString {
-    val span = QuoteSpan(quoteColor,DensityUtil.dip2px(stripeWidth),DensityUtil.dip2px(gapWidth))
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+fun SpannableString.quote(quoteColor: Int, stripeWidth: Float, gapWidth: Float = 0F, inclustart: Int, excluend: Int): SpannableString {
+    val span = QuoteSpan(quoteColor, DensityUtil.dip2px(stripeWidth), DensityUtil.dip2px(gapWidth))
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
 
@@ -139,7 +152,7 @@ fun SpannableString.quote(quoteColor: Int,stripeWidth:Float,gapWidth:Float = 0F,
  */
 fun SpannableString.scaleX(scale: Float, inclustart: Int, excluend: Int): SpannableString {
     val span = ScaleXSpan(scale)
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 
 }
@@ -161,8 +174,8 @@ fun SpannableString.leadingMargin(first: Float, rest: Float): SpannableString {
  */
 fun SpannableString.imageMargin(bitmap: Bitmap, margin: Float, inclustart: Int, excluend: Int): SpannableString {
 
-    val span = IconMarginSpan(bitmap,DensityUtil.dip2px(margin))
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    val span = IconMarginSpan(bitmap, DensityUtil.dip2px(margin))
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
 
@@ -171,8 +184,8 @@ fun SpannableString.imageMargin(bitmap: Bitmap, margin: Float, inclustart: Int, 
  * @param[drawable] 要插入的图片
  */
 fun SpannableString.imageMargin(drawable: Drawable, margin: Float, inclustart: Int, excluend: Int): SpannableString {
-    val span = DrawableMarginSpan(drawable,DensityUtil.dip2px(margin))
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    val span = DrawableMarginSpan(drawable, DensityUtil.dip2px(margin))
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
 
@@ -181,7 +194,7 @@ fun SpannableString.imageMargin(drawable: Drawable, margin: Float, inclustart: I
  * @param[gabWidth] 与文字的距离，单位: DP
  */
 fun SpannableString.bullet(gabWidth: Float, color: Int, inclustart: Int, excluend: Int): SpannableString {
-    val span = BulletSpan(DensityUtil.dip2px(gabWidth),color)
-    this.setSpan(span,inclustart,excluend,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    val span = BulletSpan(DensityUtil.dip2px(gabWidth), color)
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }

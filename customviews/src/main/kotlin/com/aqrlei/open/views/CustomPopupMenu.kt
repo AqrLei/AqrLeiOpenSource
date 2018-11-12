@@ -1,7 +1,6 @@
 package com.aqrlei.open.views
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -16,6 +15,7 @@ import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.aqrlei.open.views.util.DensityUtil
 import kotlinx.android.synthetic.main.layout_custom_pop.view.*
 import kotlinx.android.synthetic.main.layout_custom_pop_item.view.*
 
@@ -209,8 +209,7 @@ class CustomPopupMenu private constructor(
     }
 
     fun dip2px(dpValue: Float): Int {
-        val density: Float = Resources.getSystem().displayMetrics.density
-        return (0.5f + dpValue * density).toInt()
+        return DensityUtil.dip2px(dpValue)
     }
 }
 

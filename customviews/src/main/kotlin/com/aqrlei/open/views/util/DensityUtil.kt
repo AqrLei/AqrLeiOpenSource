@@ -1,4 +1,4 @@
-package com.aqrlei.open.utils
+package com.aqrlei.open.views.util
 
 import android.content.res.Resources
 
