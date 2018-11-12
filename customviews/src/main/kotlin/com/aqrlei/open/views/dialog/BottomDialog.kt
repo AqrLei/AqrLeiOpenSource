@@ -1,5 +1,6 @@
 package com.aqrlei.open.views.dialog
 
+import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.view.LayoutInflater
@@ -9,13 +10,17 @@ import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
 import com.aqrlei.open.views.R
 import com.aqrlei.open.views.adapter.BottomDialogAdapter
+import com.aqrlei.open.views.util.absoluteSize
+import com.aqrlei.open.views.util.foregroundColor
+import com.aqrlei.open.views.util.toSpannableString
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.layout_dialog_bottom.view.*
+import kotlinx.android.synthetic.main.layout_dialog_bottom_default_item.view.*
 
 /**
  * @author aqrlei on 2018/11/9
  */
-class BottomDialog : BottomSheetDialogFragment(),DialogInterface<BottomDialog> {
+class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> {
     companion object {
         @JvmStatic
         fun newInstance() = BottomDialog()
@@ -23,33 +28,56 @@ class BottomDialog : BottomSheetDialogFragment(),DialogInterface<BottomDialog> {
         private const val TAG = "bottomDialog"
     }
 
-    private lateinit var adapter: BottomDialogAdapter<*>
-    private var title: SpannableString? = null
+    private var isOutCancelable: Boolean = false
+    private var isBackCancelable: Boolean = false
+    private var isNegativeButtonShow: Boolean = false
+    private var isPositiveButtonShow: Boolean = false
+    private var isNeutralButtonShow: Boolean = false
+
+    private var negativeAction: ((View) -> Unit)? = null
+    private var positiveAction: ((View) -> Unit)? = null
+    private var neutralAction: ((View) -> Unit)? = null
+    private var adapter: BottomDialogAdapter<*>? = null
+    private var titleText: SpannableString? = null
+    private var negativeText: SpannableString? = null
+    private var positiveText: SpannableString? = null
+    private var neutralText: SpannableString? = null
     override fun configureTitle(text: String, textColor: Int, textSize: Float): BottomDialog {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        titleText = text.toSpannableString().foregroundColor(textColor).absoluteSize(textSize)
+        return this
     }
 
     override fun configureNegativeButton(text: String, textColor: Int, textSize: Float, action: ((View) -> Unit)?): BottomDialog {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        negativeAction = action
+        negativeText = text.toSpannableString().foregroundColor(textColor).absoluteSize(textSize)
+        return this
+    }
+
+    fun configureNeutralButton(text: String, textColor: Int, textSize: Float, action: ((View) -> Unit)?): BottomDialog {
+        neutralAction = action
+        neutralText = text.toSpannableString().foregroundColor(textColor).absoluteSize(textSize)
+        return this
+    }
+
+    fun refreshContent() {
+        adapter?.notifyDataSetChanged()
     }
 
     override fun configurePositiveButton(text: String, textColor: Int, textSize: Float, action: ((View) -> Unit)?): BottomDialog {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        positiveAction = action
+        positiveText = text.toSpannableString().foregroundColor(textColor).absoluteSize(textSize)
+        return this
     }
 
     override fun setOutCancelable(cancelable: Boolean): BottomDialog {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        isOutCancelable = cancelable
+        return this
     }
 
     override fun setBackCancelable(cancelable: Boolean): BottomDialog {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-/*    fun configureTitle(text: String, textColor: Int = Color.parseColor("#333333"), textSize: Float = 0F): BottomDialog {
-        val tempText = text.toSpannableString().foregroundColor(textColor).absoluteSize(textSize)
-        title = tempText
+        isBackCancelable = cancelable
         return this
-    }*/
+    }
 
 
     fun show(manager: FragmentManager?, bottomDialogAdapter: BottomDialogAdapter<*>) {
@@ -64,6 +92,26 @@ class BottomDialog : BottomSheetDialogFragment(),DialogInterface<BottomDialog> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.contentRv.adapter = this.adapter
+        isCancelable = isBackCancelable
+        setOutCancelable(isOutCancelable)
+        titleText?.let {
+            with(view.dialogTitleTv) {
+                text = it
+                visibility = View.VISIBLE
+            }
+
+        }
+        negativeText?.let {
+            with(view.negativeButton) {
+                text = it
+                view.negativeButton.visibility = View.VISIBLE
+                setOnClickListener { view ->
+                    dialog.dismiss()
+                    negativeAction?.invoke(view)
+                }
+            }
+        }
+
     }
 
     override fun onStart() {
@@ -72,4 +120,12 @@ class BottomDialog : BottomSheetDialogFragment(),DialogInterface<BottomDialog> {
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
     }
 
+    class DefaultBottomDialogAdapter(context: Context,
+                                     data: List<String>)
+        : BottomDialogAdapter<String>(context, R.layout.layout_dialog_bottom_default_item, data) {
+        override fun bindData(view: View, data: String) {
+            view.contentTv.text = data
+        }
+
+    }
 }
