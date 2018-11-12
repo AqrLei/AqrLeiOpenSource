@@ -5,8 +5,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.Layout
+import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -19,6 +22,8 @@ import com.aqrlei.open.views.dialog.IPhoneStyleDialog
 import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
 import com.aqrlei.open.views.dialog.BottomDialog
+import com.aqrlei.open.views.util.alignment
+import com.aqrlei.open.views.util.toSpannableString
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
 import kotlinx.android.synthetic.main.act_layout_qrcode.*
@@ -71,7 +76,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bottomDialogTest(){
-        BottomDialog.newInstance().show(supportFragmentManager)
+        val spannableStringBuilder = SpannableStringBuilder()
+        val text1 = "你好啊".toSpannableString().alignment(Layout.Alignment.ALIGN_LEFT)
+        val text2 = "我很好".toSpannableString().alignment(Layout.Alignment.ALIGN_CENTER)
+        spannableStringBuilder.append(text1)
+        spannableStringBuilder.append("\n")
+        spannableStringBuilder.append(text2)
+        removeTabListenerTv.text = spannableStringBuilder
+        //BottomDialog.newInstance().show(supportFragmentManager)
     }
     private fun qrCodeTest() {
         bannerCl.visibility = View.GONE
@@ -167,7 +179,7 @@ class MainActivity : AppCompatActivity() {
                 .configureNegativeButton("稍后联系")
                 .configurePositiveButton(
                         text = "立即联系",
-                        textColor = "#1b8fe6",
+                        textColor = Color.parseColor("#1b8fe6"),
                         action = {
                             Toast.makeText(this, "测试", Toast.LENGTH_SHORT).show()
                         })

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
 import com.aqrlei.open.views.R
-import com.aqrlei.open.views.adapter.BottomDialogAdapter
+import com.aqrlei.open.views.adapter.CommonRecyclerAdapter
 import com.aqrlei.open.views.util.absoluteSize
 import com.aqrlei.open.views.util.foregroundColor
 import com.aqrlei.open.views.util.toSpannableString
@@ -37,7 +37,7 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
     private var negativeAction: ((View) -> Unit)? = null
     private var positiveAction: ((View) -> Unit)? = null
     private var neutralAction: ((View) -> Unit)? = null
-    private var adapter: BottomDialogAdapter<*>? = null
+    private var adapter: CommonRecyclerAdapter<*>? = null
     private var titleText: SpannableString? = null
     private var negativeText: SpannableString? = null
     private var positiveText: SpannableString? = null
@@ -80,7 +80,7 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
     }
 
 
-    fun show(manager: FragmentManager?, bottomDialogAdapter: BottomDialogAdapter<*>) {
+    fun show(manager: FragmentManager?, bottomDialogAdapter: CommonRecyclerAdapter<*>) {
         adapter = bottomDialogAdapter
         super.show(manager, TAG)
     }
@@ -111,7 +111,12 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
                 }
             }
         }
+        adapter?.let {
+            with(view.contentRv){
 
+            }
+            view.contentRv.adapter = it
+        }
     }
 
     override fun onStart() {
@@ -122,7 +127,7 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
 
     class DefaultBottomDialogAdapter(context: Context,
                                      data: List<String>)
-        : BottomDialogAdapter<String>(context, R.layout.layout_dialog_bottom_default_item, data) {
+        : CommonRecyclerAdapter<String>(context, R.layout.layout_dialog_bottom_default_item, data) {
         override fun bindData(view: View, data: String) {
             view.contentTv.text = data
         }

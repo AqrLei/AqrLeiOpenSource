@@ -2,6 +2,7 @@ package com.aqrlei.open.views.util
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.text.Layout
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.*
@@ -39,7 +40,7 @@ fun SpannableString.backgroundColor(color: Int, inclustart: Int = 0, excluend: I
  * 改变字体大小
  * @param[relativeSize] 字体的相对大小
  * */
-fun SpannableString.relativeSize(relativeSize: Float, inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.relativeSize(relativeSize: Float, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val sizeSpan = RelativeSizeSpan(relativeSize)
     this.setSpan(sizeSpan, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
@@ -58,7 +59,7 @@ fun SpannableString.absoluteSize(absoluteSize: Float, inclustart: Int = 0, exclu
 /**
  * 设置删除线
  */
-fun SpannableString.strikeThrough(inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.strikeThrough(inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val strikeSpan = StrikethroughSpan()
     this.setSpan(strikeSpan, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
@@ -67,7 +68,7 @@ fun SpannableString.strikeThrough(inclustart: Int, excluend: Int): SpannableStri
 /**
  * 设置下滑线
  */
-fun SpannableString.underline(inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.underline(inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val span = UnderlineSpan()
     this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
@@ -76,7 +77,7 @@ fun SpannableString.underline(inclustart: Int, excluend: Int): SpannableString {
 /**
  * 设置上标
  */
-fun SpannableString.superscript(inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.superscript(inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val span = SuperscriptSpan()
     this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
@@ -85,7 +86,7 @@ fun SpannableString.superscript(inclustart: Int, excluend: Int): SpannableString
 /**
  * 设置下标
  */
-fun SpannableString.subscript(inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.subscript(inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val span = SubscriptSpan()
     this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
@@ -95,7 +96,7 @@ fun SpannableString.subscript(inclustart: Int, excluend: Int): SpannableString {
  * 改变字体样式
  * @param typeFace  [android.graphics.Typeface]
  * */
-fun SpannableString.style(typeFace: Int, inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.style(typeFace: Int, inclustart: Int, excluend: Int = this.length): SpannableString {
     val span = StyleSpan(typeFace)
     this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
@@ -110,7 +111,7 @@ fun SpannableString.style(typeFace: Int, inclustart: Int, excluend: Int): Spanna
  * 使用ClickableSpan的文本如果想真正实现点击作用，
  * 必须为TextView设置setMovementMethod方法，否则点击不会响应，
  * */
-fun SpannableString.clickable(textView: TextView, action: () -> Unit, inclustart: Int, excluend: Int, textHighlightColor: Int): SpannableString {
+fun SpannableString.clickable(textView: TextView, action: () -> Unit, inclustart: Int = 0, excluend: Int = this.length, textHighlightColor: Int): SpannableString {
     val clickActionSpan = object : ClickableSpan() {
         override fun onClick(widget: View) {
             action.invoke()
@@ -126,7 +127,7 @@ fun SpannableString.clickable(textView: TextView, action: () -> Unit, inclustart
  * 设置超链接
  * @param url 字符串对应的链接
  */
-fun SpannableString.url(textView: TextView, url: String, inclustart: Int, excluend: Int, textHighlightColor: Int): SpannableString {
+fun SpannableString.url(textView: TextView, url: String, inclustart: Int = 0, excluend: Int = this.length, textHighlightColor: Int): SpannableString {
     textView.movementMethod = LinkMovementMethod.getInstance()
     textView.highlightColor = textHighlightColor
     val span = URLSpan(url)
@@ -140,7 +141,7 @@ fun SpannableString.url(textView: TextView, url: String, inclustart: Int, exclue
  * @param stripeWidth 竖线的宽度，单位: DP
  * @param gapWidth 竖线与文字的距离，单位: DP
  */
-fun SpannableString.quote(quoteColor: Int, stripeWidth: Float, gapWidth: Float = 0F, inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.quote(quoteColor: Int, stripeWidth: Float, gapWidth: Float = 0F, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val span = QuoteSpan(quoteColor, DensityUtil.dip2px(stripeWidth), DensityUtil.dip2px(gapWidth))
     this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
@@ -150,7 +151,7 @@ fun SpannableString.quote(quoteColor: Int, stripeWidth: Float, gapWidth: Float =
  * 文字缩放
  * @param scale 缩放倍数
  */
-fun SpannableString.scaleX(scale: Float, inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.scaleX(scale: Float, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val span = ScaleXSpan(scale)
     this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
@@ -172,7 +173,7 @@ fun SpannableString.leadingMargin(first: Float, rest: Float): SpannableString {
  * @param[bitmap] 要插入的图片
  * @param[margin] 图片与文字的距离，单位: DP
  */
-fun SpannableString.imageMargin(bitmap: Bitmap, margin: Float, inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.imageMargin(bitmap: Bitmap, margin: Float, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
 
     val span = IconMarginSpan(bitmap, DensityUtil.dip2px(margin))
     this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
@@ -183,7 +184,7 @@ fun SpannableString.imageMargin(bitmap: Bitmap, margin: Float, inclustart: Int, 
  * 插入图片
  * @param[drawable] 要插入的图片
  */
-fun SpannableString.imageMargin(drawable: Drawable, margin: Float, inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.imageMargin(drawable: Drawable, margin: Float, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val span = DrawableMarginSpan(drawable, DensityUtil.dip2px(margin))
     this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
@@ -193,8 +194,18 @@ fun SpannableString.imageMargin(drawable: Drawable, margin: Float, inclustart: I
  * 标签圆点效果
  * @param[gabWidth] 与文字的距离，单位: DP
  */
-fun SpannableString.bullet(gabWidth: Float, color: Int, inclustart: Int, excluend: Int): SpannableString {
+fun SpannableString.bullet(gabWidth: Float, color: Int, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
     val span = BulletSpan(DensityUtil.dip2px(gabWidth), color)
+    this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+    return this
+}
+
+/**
+ * 对齐方式
+ * @param[align] [Layout.Alignment]
+ * */
+fun SpannableString.alignment(align: Layout.Alignment, inclustart: Int = 0, excluend: Int = this.length): SpannableString {
+    val span = AlignmentSpan.Standard(align)
     this.setSpan(span, inclustart, excluend, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
     return this
 }
