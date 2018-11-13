@@ -76,13 +76,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bottomDialogTest(){
-        val spannableStringBuilder = SpannableStringBuilder()
-        val text1 = "你好啊".toSpannableString().alignment(Layout.Alignment.ALIGN_LEFT)
-        val text2 = "我很好".toSpannableString().alignment(Layout.Alignment.ALIGN_CENTER)
-        spannableStringBuilder.append(text1)
-        spannableStringBuilder.append("\n")
-        spannableStringBuilder.append(text2)
-        removeTabListenerTv.text = spannableStringBuilder
+
         //BottomDialog.newInstance().show(supportFragmentManager)
     }
     private fun qrCodeTest() {

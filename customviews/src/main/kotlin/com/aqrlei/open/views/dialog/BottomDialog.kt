@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.aqrlei.open.views.R
 import com.aqrlei.open.views.adapter.CommonRecyclerAdapter
 import com.aqrlei.open.views.util.absoluteSize
@@ -30,9 +31,6 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
 
     private var isOutCancelable: Boolean = false
     private var isBackCancelable: Boolean = false
-    private var isNegativeButtonShow: Boolean = false
-    private var isPositiveButtonShow: Boolean = false
-    private var isNeutralButtonShow: Boolean = false
 
     private var negativeAction: ((View) -> Unit)? = null
     private var positiveAction: ((View) -> Unit)? = null
@@ -79,7 +77,6 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
         return this
     }
 
-
     fun show(manager: FragmentManager?, bottomDialogAdapter: CommonRecyclerAdapter<*>) {
         adapter = bottomDialogAdapter
         super.show(manager, TAG)
@@ -104,18 +101,38 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
         negativeText?.let {
             with(view.negativeButton) {
                 text = it
-                view.negativeButton.visibility = View.VISIBLE
+                visibility = View.VISIBLE
                 setOnClickListener { view ->
                     dialog.dismiss()
                     negativeAction?.invoke(view)
                 }
             }
         }
-        adapter?.let {
-            with(view.contentRv){
-
+        positiveText?.let {
+            with(view.positiveButton) {
+                text = it
+                visibility = View.VISIBLE
+                setOnClickListener { view ->
+                    dialog.dismiss()
+                    positiveAction?.invoke(view)
+                }
             }
-            view.contentRv.adapter = it
+        }
+        neutralText?.let {
+            with(view.neutralButton) {
+                text = it
+                visibility = View.VISIBLE
+                setOnClickListener { view ->
+                    dialog.dismiss()
+                    neutralAction?.invoke(view)
+                }
+            }
+        }
+        adapter?.let {
+            with(view.contentRv) {
+                layoutManager = LinearLayoutManager(context)
+                adapter = it
+            }
         }
     }
 
@@ -131,6 +148,5 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
         override fun bindData(view: View, data: String) {
             view.contentTv.text = data
         }
-
     }
 }
