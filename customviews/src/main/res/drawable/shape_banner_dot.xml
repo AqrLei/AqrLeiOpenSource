@@ -13,7 +13,7 @@
         <shape android:shape="oval">
             <size android:width="5dp"
                   android:height="5dp"/>
-            <solid android:color="@color/custom_normal_blue"/>
+            <solid android:color="@color/custom_view_dialog_button_text"/>
         </shape>
     </item>
 

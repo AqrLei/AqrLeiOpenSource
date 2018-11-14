@@ -8,8 +8,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.text.Layout
-import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -18,12 +16,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.aqrlei.open.utils.qrcode.*
-import com.aqrlei.open.views.dialog.IPhoneStyleDialog
 import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
 import com.aqrlei.open.views.dialog.BottomDialog
-import com.aqrlei.open.views.util.alignment
-import com.aqrlei.open.views.util.toSpannableString
+import com.aqrlei.open.views.dialog.IPhoneStyleDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
 import kotlinx.android.synthetic.main.act_layout_qrcode.*
@@ -75,10 +71,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun bottomDialogTest(){
+    private fun bottomDialogTest() {
+        BottomDialog.newInstance().apply {
+            configureTitle("提示")
+            configureNegativeButton("取消")
+            configurePositiveButton("确定")
+            configureNeutralButton("好的")
+            setOutCancelable(true)
+            setBackCancelable(true)
+            show(supportFragmentManager, BottomDialog.DefaultBottomDialogAdapter(
+                    this@MainActivity,
+                    listOf("测试一", "测试二", "测试三", "测试四")))
 
-        //BottomDialog.newInstance().show(supportFragmentManager)
+        }
     }
+
     private fun qrCodeTest() {
         bannerCl.visibility = View.GONE
         qrcodeCl.visibility = View.VISIBLE

@@ -19,4 +19,10 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="HorizontalLineView">
+        <item name="android:background">@color/custom_view_divider</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+    </style>
+
 </resources>

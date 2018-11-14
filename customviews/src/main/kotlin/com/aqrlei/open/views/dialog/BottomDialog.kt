@@ -1,6 +1,7 @@
 package com.aqrlei.open.views.dialog
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
 import android.view.LayoutInflater
@@ -51,7 +52,7 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
         return this
     }
 
-    fun configureNeutralButton(text: String, textColor: Int, textSize: Float, action: ((View) -> Unit)?): BottomDialog {
+    fun configureNeutralButton(text: String, textColor: Int = Color.parseColor("#333333"), textSize: Float = 12F, action: ((View) -> Unit)? = null): BottomDialog {
         neutralAction = action
         neutralText = text.toSpannableString().foregroundColor(textColor).absoluteSize(textSize)
         return this

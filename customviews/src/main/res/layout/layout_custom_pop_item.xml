@@ -15,7 +15,5 @@
 
     <View
         android:id="@+id/dividerBottom"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/custom_view_divider" />
+        style="@style/HorizontalLineView" />
 </LinearLayout>
