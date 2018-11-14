@@ -41,16 +41,20 @@ class RoundBar @JvmOverloads constructor(
 
         private const val DEFAULT_BG_COLOR = "#bbbbbb"
         private const val DEFAULT_PROGRESS_COLOR = "#41a9f8"
+
+        private const val GRADIENT_COLOR_START = "#21adf1"
+        private const val GRADIENT_COLOR_END = "#2287ee"
     }
 
     enum class CapStyle {
         BUTT, ROUND, SQUARE
     }
 
+    private var mGradientPositions: ArrayList<Float>? = null//渐变色对应的位置
     private val mPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)//画笔
     private var mBackgroundColor: Int = 0//背景颜色
     private var mProgressColor: Int = 0//进度颜色
-    private var mGradientListColor: ArrayList<Int>? = null//渐变色
+    private val mGradientListColor = ArrayList<Int>()//渐变色
     private var mRadius: Float = 100F//圆半径
     private var mMaxProgress: Float = 10F//最大的进度
     private var mCurrentProgress: Float = 5f//当前进度
@@ -67,9 +71,7 @@ class RoundBar @JvmOverloads constructor(
 
     init {
         mDrawDegree = 0F
-        mGradientListColor = ArrayList()
-        mGradientListColor?.add(Color.parseColor("#21ADF1"))
-        mGradientListColor?.add(Color.parseColor("#2287EE"))
+
         mPaint.style = Paint.Style.STROKE
         /**
          * val typedArray = TintTypedArray.obtainStyledAttributes(
@@ -77,6 +79,23 @@ class RoundBar @JvmOverloads constructor(
         attrs,
         R.styleable.RoundBar)*/
         context.obtainStyledAttributes(attrs, R.styleable.RoundBar)?.run {
+            getTextArray(R.styleable.RoundBar_positions)?.let {
+                if (it.isNotEmpty()) {
+                    mGradientPositions = ArrayList()
+                    it.forEach { pos ->
+                        mGradientPositions?.add(pos.toString().toFloat())
+                    }
+                }
+
+            }
+            getTextArray(R.styleable.RoundBar_gradientColors)?.let {
+                it.forEach { color ->
+                    mGradientListColor.add(Color.parseColor(color.toString()))
+                }
+            } ?: let {
+                mGradientListColor.add(Color.parseColor(GRADIENT_COLOR_START))
+                mGradientListColor.add(Color.parseColor(GRADIENT_COLOR_END))
+            }
             setBackgroundColor(getColor(
                     R.styleable.RoundBar_backgroundColor,
                     Color.parseColor(DEFAULT_BG_COLOR)))
@@ -96,7 +115,6 @@ class RoundBar @JvmOverloads constructor(
             setRotateDegree(getFloat(R.styleable.RoundBar_rotateDegree, 0f))
             setAnimationV(getFloat(R.styleable.RoundBar_animationVelocity, 1f))
             recycle()
-
         }
     }
 
@@ -133,13 +151,14 @@ class RoundBar @JvmOverloads constructor(
     }
 
     fun setGradientColor(gradientColor: ArrayList<Int>?) {
-        if (gradientColor != null && gradientColor.size < 2) {
+        if (gradientColor?.size ?: 0 < 2) {
             throw IllegalArgumentException("needs >= 2 number of colors")
         }
-        mGradientListColor = gradientColor
+        mGradientListColor.clear()
+        mGradientListColor.addAll(gradientColor!!)
     }
 
-    fun getGradientColor(): ArrayList<Int>? {
+    fun getGradientColor(): ArrayList<Int> {
         return mGradientListColor
     }
 
@@ -207,10 +226,7 @@ class RoundBar @JvmOverloads constructor(
         canvas?.drawArc(left, top, right, bottom, rStartDegree,
                 mSweepDegree, false, mPaint)
         if (mIsUseGradientColor) {
-            mGradientListColor?.let {
-                mPaint.shader = SweepGradient(centerX, centerY, it[0], it[1])
-            }
-
+            mPaint.shader = SweepGradient(centerX, centerY, mGradientListColor.toIntArray(), mGradientPositions?.toFloatArray())
         } else {
             mPaint.color = mProgressColor
         }

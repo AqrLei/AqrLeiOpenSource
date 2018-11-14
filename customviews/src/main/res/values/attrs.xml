@@ -4,6 +4,7 @@
         <attr name="widthHeightRatio" format="string" />
         <attr name="isAuto" format="boolean" />
         <attr name="interval" format="integer" />
+        <!-- Reference to an bitmap -->
         <attr name="defaultBanner" format="reference"/>
     </declare-styleable>
     <declare-styleable name="RoundBar">
@@ -22,6 +23,10 @@
             <enum name="round" value="1"/>
             <enum name="square" value="2"/>
         </attr>
+       <!-- Reference to an array resource that will populate a list.-->
+        <attr name="positions" format="reference"/>
+        <!-- Reference to an array resource that will populate a list.-->
+        <attr name="gradientColors" format="reference"/>
         <attr name="useGradientColor" format="boolean"/>
         <attr name="openAnimation" format="boolean"/>
     </declare-styleable>
