@@ -24,6 +24,8 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
 import kotlinx.android.synthetic.main.act_layout_qrcode.*
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.DateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -72,6 +74,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bottomDialogTest() {
+        val calender = Calendar.getInstance()
+        val formatOne = DateFormat.getDateTimeInstance().format(calender.time)
+        val formatOneDate = DateFormat.getDateInstance(DateFormat.SHORT).format(calender.time)
+        val formatOneTime = DateFormat.getTimeInstance(DateFormat.SHORT).format(calender.time)
+        //取反运算的验证
         BottomDialog.newInstance().apply {
             configureTitle("提示")
             configureNegativeButton("取消")
@@ -81,7 +88,8 @@ class MainActivity : AppCompatActivity() {
             setBackCancelable(true)
             show(supportFragmentManager, BottomDialog.DefaultBottomDialogAdapter(
                     this@MainActivity,
-                    listOf("测试一", "测试二", "测试三", "测试四")))
+                    listOf("${(1.inv())}", "${2.inv()}", "${3.inv()}", formatOne,
+                            formatOneDate, formatOneTime)))
 
         }
     }
