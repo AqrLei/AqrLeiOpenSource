@@ -30,4 +30,19 @@
         <attr name="useGradientColor" format="boolean"/>
         <attr name="openAnimation" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="DimensionRadarView">
+        <attr name="scoreLevel" format="integer"/>
+        <attr name="maxScore" format="integer"/>
+        <attr name="dimensionTextSize" format="dimension"/>
+        <attr name="dimensionTextList" format="reference"/>
+        <attr name="dimensionTextColorList" format="reference"/>
+        <attr name="scoreLevelList" format="reference"/>
+        <attr name="dimensionRadarBackgroundColor" format="reference"/>
+        <attr name="dimensionRadarScoreColorList" format="reference"/>
+        <attr name="diagonalLineColor" format="color"/>
+        <attr name="diagonalLineWidth" format="dimension"/>
+        <attr name="sideLineColor" format="color"/>
+        <attr name="sideLineWidth" format="dimension"/>
+    </declare-styleable>
 </resources>
