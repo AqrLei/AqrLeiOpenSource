@@ -5,44 +5,45 @@
         <attr name="isAuto" format="boolean" />
         <attr name="interval" format="integer" />
         <!-- Reference to an bitmap -->
-        <attr name="defaultBanner" format="reference"/>
+        <attr name="defaultBanner" format="reference" />
     </declare-styleable>
     <declare-styleable name="RoundBar">
-        <attr name="backgroundColor" format="color"/>
-        <attr name="progressColor" format="color"/>
-        <attr name="startDegree" format="float"/>
-        <attr name="sweepDegree" format="float"/>
-        <attr name="rotateDegree" format="float"/>
-        <attr name="animationVelocity" format="float"/>
-        <attr name="radius" format="dimension"/>
-        <attr name="roundWidth" format="dimension"/>
-        <attr name="maxProgress" format="float"/>
-        <attr name="progress" format="float"/>
+        <attr name="backgroundColor" format="color" />
+        <attr name="progressColor" format="color" />
+        <attr name="startDegree" format="float" />
+        <attr name="sweepDegree" format="float" />
+        <attr name="rotateDegree" format="float" />
+        <attr name="animationVelocity" format="float" />
+        <attr name="radius" format="dimension" />
+        <attr name="roundWidth" format="dimension" />
+        <attr name="maxProgress" format="float" />
+        <attr name="progress" format="float" />
         <attr name="capStyle">
-            <enum name="butt" value="0"/>
-            <enum name="round" value="1"/>
-            <enum name="square" value="2"/>
+            <enum name="butt" value="0" />
+            <enum name="round" value="1" />
+            <enum name="square" value="2" />
         </attr>
-       <!-- Reference to an array resource that will populate a list.-->
-        <attr name="positions" format="reference"/>
         <!-- Reference to an array resource that will populate a list.-->
-        <attr name="gradientColors" format="reference"/>
-        <attr name="useGradientColor" format="boolean"/>
-        <attr name="openAnimation" format="boolean"/>
+        <attr name="positions" format="reference" />
+        <!-- Reference to an array resource that will populate a list.-->
+        <attr name="gradientColors" format="reference" />
+        <attr name="useGradientColor" format="boolean" />
+        <attr name="openAnimation" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="DimensionRadarView">
-        <attr name="scoreLevel" format="integer"/>
-        <attr name="maxScore" format="integer"/>
-        <attr name="dimensionTextSize" format="dimension"/>
-        <attr name="dimensionTextList" format="reference"/>
-        <attr name="dimensionTextColorList" format="reference"/>
-        <attr name="scoreLevelList" format="reference"/>
-        <attr name="dimensionRadarBackgroundColor" format="reference"/>
-        <attr name="dimensionRadarScoreColorList" format="reference"/>
-        <attr name="diagonalLineColor" format="color"/>
-        <attr name="diagonalLineWidth" format="dimension"/>
-        <attr name="sideLineColor" format="color"/>
-        <attr name="sideLineWidth" format="dimension"/>
+        <attr name="scoreLevel" format="integer" />
+        <attr name="maxScore" format="integer" />
+        <attr name="dimensionRotateDegree" format="float" />
+        <attr name="dimensionTextSize" format="dimension" />
+        <attr name="dimensionTextList" format="reference" />
+        <attr name="dimensionTextColorList" format="reference" />
+        <attr name="dimensionScoreLevelList" format="reference" />
+        <attr name="dimensionRadarBackgroundColor" format="reference" />
+        <attr name="dimensionRadarScoreColorList" format="reference" />
+        <attr name="diagonalLineColor" format="color" />
+        <attr name="diagonalLineWidth" format="dimension" />
+        <attr name="sideLineColor" format="color" />
+        <attr name="sideLineWidth" format="dimension" />
     </declare-styleable>
 </resources>
