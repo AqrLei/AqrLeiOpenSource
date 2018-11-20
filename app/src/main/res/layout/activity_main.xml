@@ -53,8 +53,10 @@
         android:id="@+id/drV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         app:dimensionRotateDegree="30"
-        android:layout_weight="1" />
+        app:dimensionScoreLevelList="@array/dimension_score_level"
+        app:dimensionTextList="@array/dimension_text" />
 
 
 </LinearLayout>
