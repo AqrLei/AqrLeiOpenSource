@@ -36,19 +36,20 @@
         <attr name="maxScore" format="integer" />
         <attr name="dimensionRotateDegree" format="float" />
         <attr name="dimensionTextSize" format="dimension" />
-        <attr name="dimensionTextList" format="reference" />
-        <attr name="dimensionTextColorList" format="reference" />
-        <attr name="dimensionScoreLevelList" format="reference" />
-        <attr name="scoreLevelDrawStyle">
-            <enum name="full" value="0" />
-            <enum name="stroke" value="1" />
-        </attr>
-        <attr name="maxSupportScoreNumber" format="integer" />
-        <attr name="dimensionRadarBackgroundColor" format="reference" />
-        <attr name="dimensionRadarScoreColorList" format="reference" />
         <attr name="diagonalLineColor" format="color" />
         <attr name="diagonalLineWidth" format="dimension" />
         <attr name="sideLineColor" format="color" />
         <attr name="sideLineWidth" format="dimension" />
+        <attr name="maxSupportScoreNumber" format="integer" />
+        <attr name="dimensionRadarBackgroundColor" format="color" />
+        <attr name="scoreLevelDrawStyle">
+            <enum name="full" value="0" />
+            <enum name="stroke" value="1" />
+        </attr>
+        <attr name="dimensionTextArray" format="reference" />
+        <attr name="dimensionTextColorArray" format="reference" />
+        <attr name="dimensionRadarScoreColorArray" format="reference" />
+        <attr name="dimensionScoreLevelArray" format="reference" />
+
     </declare-styleable>
 </resources>
