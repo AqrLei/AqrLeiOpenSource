@@ -56,7 +56,16 @@
         android:layout_weight="1"
         app:dimensionRadarBackgroundColor="@color/colorDimensionBackground"
         app:dimensionRotateDegree="30"
+        app:scoreLevelDrawStyle="full"
+        app:sideLineColor="@color/colorPrimary"
+        app:sideLineWidth="2dp"
+        app:diagonalLineColor="@color/colorPrimary"
+        app:diagonalLineWidth="2dp"
+        app:maxScore="200"
+        app:scoreLevel="5"
+        app:dimensionTextColorArray="@array/dimension_text_color"
         app:dimensionScoreLevelArray="@array/dimension_score_level"
+        app:dimensionRadarScoreColorArray="@array/dimension_score_color"
         app:dimensionTextArray="@array/dimension_text" />
 
 

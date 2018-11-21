@@ -69,7 +69,17 @@ class MainActivity : AppCompatActivity() {
         removeTabListenerTv.setOnClickListener {
             labelTl.removeOnTabSelectedListener(listener)
             Toast.makeText(this, "remove done", Toast.LENGTH_SHORT).show()
+            dimensionRadarViewTest()
+        }
+    }
 
+    private fun dimensionRadarViewTest(){
+        with(drV){
+           //TODO  addDimensionText("测试") 未周全
+            maxSupportScoreNumber = 2
+            replaceDimensionText(0,"测试啊")
+            changeScoreColor(1,Color.parseColor("#88879ddf"))
+            adjustItemScoreLevel(1, floatArrayOf(50F,30F,40F,100F,150F,30F).toTypedArray())
         }
     }
 
