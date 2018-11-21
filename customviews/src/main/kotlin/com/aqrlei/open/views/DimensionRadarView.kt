@@ -211,7 +211,7 @@ class DimensionRadarView @JvmOverloads constructor(
      * 文字居中，距底部的是一半字体大小的距离
      * */
     private fun drawText(canvas: Canvas, x: Float, y: Float, text: String, textColor: Int) {
-        val tempX = x - (dimensionTextSize * text.length) / 2F
+        val tempX = x - (textPaint.measureText(text)) / 2F
         val tempY = y - dimensionTextSize / 2
         canvas.drawText(text, tempX, tempY, textPaint.apply {
             color = textColor
