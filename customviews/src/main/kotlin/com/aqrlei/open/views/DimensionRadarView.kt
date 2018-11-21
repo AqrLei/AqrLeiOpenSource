@@ -280,7 +280,6 @@ class DimensionRadarView @JvmOverloads constructor(
         })
     }
 
-
     private fun drawScoreLines(canvas: Canvas) {
         for (i in 0 until supportScoreArray.size) {
             canvas.drawPath(getScorePath(i), scorePaint.apply {
