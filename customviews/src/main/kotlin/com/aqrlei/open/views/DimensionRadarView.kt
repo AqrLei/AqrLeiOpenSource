@@ -16,8 +16,8 @@ import kotlin.math.PI
  * maxScore 最高评分
  * dimensionTextSize
  * dimensionTextList 评分维度 >=3
- * dimensionTextColorList
- * dimensionScoreLevelList 维度评分 this.size == dimensionTextList.size
+ * dimensionTextColorArray
+ * dimensionScoreLevelArray 维度评分 this.size == dimensionTextList.size
  * dimensionRadarBackgroundColor
  * dimensionRadarScoreColorList
  * diagonalLineColor
@@ -49,12 +49,20 @@ class DimensionRadarView @JvmOverloads constructor(
     private var dimensionTextSize: Int = DensityUtil.dip2px(14F)
 
     private val dimensionTextList = ArrayList<String>()
-    private lateinit var dimensionTextColorList: Array<Int>
+    private lateinit var dimensionTextColorArray: Array<Int>
 
     private var maxScore: Int = 100
-    private lateinit var dimensionScoreLevelList: Array<Float>
+    private lateinit var dimensionScoreLevelArray: Array<Float>
+
+
+    private var maxSupportScoreNumber: Int = 1
+    private lateinit var supportScoreArray: Array<Array<Float>?>
+    private lateinit var scoreColorArray: Array<Int>
 
     private val dimensionScoreLevelPointList by lazy {
+        ArrayList<PointF>()
+    }
+    private val dimensionMaxScorePointList by lazy {
         ArrayList<PointF>()
     }
 
@@ -74,11 +82,20 @@ class DimensionRadarView @JvmOverloads constructor(
     private val linePaint = Paint()
     private val scorePaint = Paint()
     private val textPaint = Paint()
+    private val dimensionBackgroundPaint = Paint()
+    private val maxScorePath = Path()
+
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.DimensionRadarView)?.run {
             scoreLevel = getInteger(R.styleable.DimensionRadarView_scoreLevel, scoreLevel)
             maxScore = getInteger(R.styleable.DimensionRadarView_maxScore, maxScore)
+            maxSupportScoreNumber = getInteger(R.styleable.DimensionRadarView_maxSupportScoreNumber,
+                    maxSupportScoreNumber)
+            supportScoreArray = arrayOfNulls(maxSupportScoreNumber)
+            scoreColorArray = Array(maxSupportScoreNumber) {
+                DEFAULT_SCORE_COLOR
+            }
             dimensionTextSize = getDimensionPixelSize(
                     R.styleable.DimensionRadarView_dimensionTextSize,
                     dimensionTextSize)
@@ -89,11 +106,12 @@ class DimensionRadarView @JvmOverloads constructor(
             }
             divideCount = dimensionTextList.size
 
-            dimensionTextColorList = Array(divideCount) { DEFAULT_TEXT_COLOR }
-            dimensionScoreLevelList = Array(divideCount) { 0F }
+            divideDegree = 360.0F / divideCount
+
+            dimensionTextColorArray = Array(divideCount) { DEFAULT_TEXT_COLOR }
             getTextArray(R.styleable.DimensionRadarView_dimensionTextColorList)?.forEachIndexed { index, it ->
                 if (index < divideCount) {
-                    dimensionTextColorList[index] =
+                    dimensionTextColorArray[index] =
                             try {
                                 Color.parseColor(it.toString())
                             } catch (e: IllegalArgumentException) {
@@ -101,11 +119,13 @@ class DimensionRadarView @JvmOverloads constructor(
                             }
                 }
             }
+            dimensionScoreLevelArray = Array(divideCount) { 0F }
             getTextArray(R.styleable.DimensionRadarView_dimensionScoreLevelList)?.forEachIndexed { index, it ->
                 if (index < divideCount) {
-                    dimensionScoreLevelList[index] = (it?.toString()?.toFloatOrNull() ?: 0F)
+                    dimensionScoreLevelArray[index] = (it?.toString()?.toFloatOrNull() ?: 0F)
                 }
             }
+            supportScoreArray[0] = dimensionScoreLevelArray
 
             dimensionRadarBackgroundColor = getColor(
                     R.styleable.DimensionRadarView_dimensionRadarBackgroundColor,
@@ -137,25 +157,66 @@ class DimensionRadarView @JvmOverloads constructor(
                 Paint.Style.FILL_AND_STROKE
             else Paint.Style.STROKE
             isAntiAlias = true
-            color = DEFAULT_SCORE_COLOR
         }
         with(textPaint) {
             isAntiAlias = true
             style = Paint.Style.FILL
             textSize = dimensionTextSize.toFloat()
         }
+        with(dimensionBackgroundPaint) {
+            isAntiAlias = true
+            style = Paint.Style.FILL_AND_STROKE
+            color = dimensionRadarBackgroundColor
+        }
+
+    }
+
+    private fun initMaxScorePath() {
+        dimensionMaxScorePointList.clear()
+        val rotateRadian = (rotateDegree / 360.0) * 2 * PI
+        val divideRadian = (divideDegree / 360.0) * 2 * PI
+        addFirstMaxScoreLevelPoint(rotateRadian)
+        var firstRadian = rotateRadian + divideRadian
+        for (i in 1 until divideCount) {
+            addMaxScoreLevelPoint(firstRadian)
+            firstRadian += divideRadian
+        }
+        maxScorePath.reset()
+        for (i in 0 until dimensionMaxScorePointList.size) {
+            if (i == 0) {
+                maxScorePath.moveTo(dimensionMaxScorePointList[i].x, dimensionMaxScorePointList[i].y)
+            } else {
+                maxScorePath.lineTo(dimensionMaxScorePointList[i].x, dimensionMaxScorePointList[i].y)
+            }
+        }
+        maxScorePath.close()
+    }
+
+    private fun addFirstMaxScoreLevelPoint(radian: Double) {
+        val firstMaxScoreX = (centerX + radius * Math.sin(radian)).toFloat()
+        val firstMaxScoreY = (centerY - radius * Math.cos(radian)).toFloat()
+        dimensionMaxScorePointList.add(PointF(firstMaxScoreX, firstMaxScoreY))
+    }
+
+    private fun addMaxScoreLevelPoint(radian: Double) {
+        val maxScoreX = (centerX + radius * Math.sin(radian)).toFloat()
+        val maxScoreY = (centerY - radius * Math.cos(radian)).toFloat()
+        dimensionMaxScorePointList.add(PointF(maxScoreX, maxScoreY))
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         radius = (Math.min(w, h) - 2 * dimensionTextSize) / 2 * 0.9F
         centerX = w / 2.0F
         centerY = h / 2.0F
+        initMaxScorePath()
+        postInvalidate()
         super.onSizeChanged(w, h, oldw, oldh)
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (divideCount >= 3) {
+            drawDimensionBackground(canvas)
             canvas.save()
             drawScoreLevel(canvas)
             canvas.restore()
@@ -163,8 +224,11 @@ class DimensionRadarView @JvmOverloads constructor(
         }
     }
 
-    private fun drawScoreLevel(canvas: Canvas) {
+    private fun drawDimensionBackground(canvas: Canvas) {
+        canvas.drawPath(maxScorePath, dimensionBackgroundPaint)
+    }
 
+    private fun drawScoreLevel(canvas: Canvas) {
         canvas.rotate(rotateDegree, centerX, centerY)
         for (i in 0 until scoreLevel) {
             val scale = (1.0F - 1.0F / (scoreLevel - i))
@@ -174,10 +238,8 @@ class DimensionRadarView @JvmOverloads constructor(
     }
 
     private fun drawLines(canvas: Canvas, index: Int) {
-        val a = 360.0 / divideCount
-        divideDegree = a.toFloat()
-        val b = ((a / 2) / 360.0) * 2 * PI
-        val c = (((180 - a) / 2.0) / 360.0) * 2 * PI
+        val b = ((divideDegree / 2) / 360.0) * 2 * PI
+        val c = (((180 - divideDegree) / 2.0) / 360.0) * 2 * PI
         val side = radius * Math.abs(Math.sin(b)) * 2
         val diagonalPath = Path()
         val sidePath = Path()
@@ -188,7 +250,7 @@ class DimensionRadarView @JvmOverloads constructor(
             val diagonalX = centerX
             val diagonalY = centerY - radius
             if (index == 0) {
-                drawText(canvas, diagonalX, diagonalY, dimensionTextList[i], dimensionTextColorList[i])
+                drawText(canvas, diagonalX, diagonalY, dimensionTextList[i], dimensionTextColorArray[i])
             }
             val sideX = diagonalX + (side * Math.abs(Math.sin(c))).toFloat()
             val sideY = diagonalY + (side * Math.abs(Math.cos(c))).toFloat()
@@ -203,7 +265,7 @@ class DimensionRadarView @JvmOverloads constructor(
             canvas.drawPath(sidePath, linePaint.apply {
                 color = sideLineColor
             })
-            canvas.rotate(a.toFloat(), centerX, centerY)
+            canvas.rotate(divideDegree, centerX, centerY)
         }
     }
 
@@ -219,34 +281,55 @@ class DimensionRadarView @JvmOverloads constructor(
     }
 
 
-    /**
-     * 各个点的信息都需要dimensionScoreLevelList来确认
-     */
     private fun drawScoreLines(canvas: Canvas) {
-        dimensionScoreLevelPointList.clear()
+        for (i in 0 until supportScoreArray.size) {
+            canvas.drawPath(getScorePath(i), scorePaint.apply {
+                color = scoreColorArray[i]
+            })
+        }
+    }
 
+    private fun getScorePath(index: Int): Path {
+        dimensionScoreLevelPointList.clear()
         val rotateRadian = (rotateDegree / 360.0) * 2 * PI
         val divideRadian = (divideDegree / 360.0) * 2 * PI
-
-        val firstScoreRatio = formatScoreLevel(dimensionScoreLevelList[0]) / maxScore * 1.0
-        val firstX = (centerX + radius * Math.sin(rotateRadian) * firstScoreRatio).toFloat()
-        val firstY = (centerY - radius * Math.cos(rotateRadian) * firstScoreRatio).toFloat()
+        addFirstScoreLevelPoint(rotateRadian, index)
         var firstRadian = rotateRadian + divideRadian
-        dimensionScoreLevelPointList.add(PointF(firstX, firstY))
         for (i in 1 until divideCount) {
-            val scoreRatio = formatScoreLevel(dimensionScoreLevelList[i]) / maxScore * 1.0
-            val x = (centerX + radius * Math.sin(firstRadian) * scoreRatio).toFloat()
-            val y = (centerY - radius * Math.cos(firstRadian) * scoreRatio).toFloat()
-            dimensionScoreLevelPointList.add(PointF(x, y))
+            addScoreLevelPoint(firstRadian, i, index)
             firstRadian += divideRadian
         }
         val path = Path()
-        path.moveTo(firstX, firstY)
-        for (i in 1 until dimensionScoreLevelPointList.size) {
-            path.lineTo(dimensionScoreLevelPointList[i].x, dimensionScoreLevelPointList[i].y)
+        path.reset()
+        for (i in 0 until dimensionScoreLevelPointList.size) {
+            if (i == 0) {
+                path.moveTo(dimensionScoreLevelPointList[i].x, dimensionScoreLevelPointList[i].y)
+            } else {
+                path.lineTo(dimensionScoreLevelPointList[i].x, dimensionScoreLevelPointList[i].y)
+            }
         }
         path.close()
-        canvas.drawPath(path, scorePaint)
+        return path
+    }
+
+    private fun addFirstScoreLevelPoint(radian: Double, index: Int) {
+        val scoreLevelArray = supportScoreArray[index]
+        scoreLevelArray?.run {
+            val firstScoreRatio = formatScoreLevel(this[0]) / maxScore * 1.0
+            val firstX = (centerX + radius * Math.sin(radian) * firstScoreRatio).toFloat()
+            val firstY = (centerY - radius * Math.cos(radian) * firstScoreRatio).toFloat()
+            dimensionScoreLevelPointList.add(PointF(firstX, firstY))
+        }
+    }
+
+    private fun addScoreLevelPoint(radian: Double, index: Int, parentIndex: Int) {
+        val scoreLevelArray = supportScoreArray[parentIndex]
+        scoreLevelArray?.run {
+            val scoreRatio = formatScoreLevel(this[index]) / maxScore * 1.0
+            val x = (centerX + radius * Math.sin(radian) * scoreRatio).toFloat()
+            val y = (centerY - radius * Math.cos(radian) * scoreRatio).toFloat()
+            dimensionScoreLevelPointList.add(PointF(x, y))
+        }
     }
 
     private fun formatScoreLevel(scoreLevel: Float): Float {

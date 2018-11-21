@@ -43,6 +43,7 @@
             <enum name="full" value="0" />
             <enum name="stroke" value="1" />
         </attr>
+        <attr name="maxSupportScoreNumber" format="integer" />
         <attr name="dimensionRadarBackgroundColor" format="reference" />
         <attr name="dimensionRadarScoreColorList" format="reference" />
         <attr name="diagonalLineColor" format="color" />
