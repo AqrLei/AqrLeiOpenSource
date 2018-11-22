@@ -19,6 +19,7 @@ import com.aqrlei.open.utils.qrcode.*
 import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
 import com.aqrlei.open.views.dialog.BottomDialog
+import com.aqrlei.open.views.dialog.CircleRotateProgressDialog
 import com.aqrlei.open.views.dialog.IPhoneStyleDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
@@ -73,13 +74,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun dimensionRadarViewTest(){
-        with(drV){
-           addDimensionText("测试") //未周全
+    private fun dimensionRadarViewTest() {
+        CircleRotateProgressDialog(this).apply {
+            show()
+        }
+        with(drV) {
+            addDimensionText("测试")
             maxSupportScoreNumber = 2
-            replaceDimensionText(0,"测试啊")
-            changeScoreColor(1,Color.parseColor("#88879ddf"))
-            adjustItemScoreLevel(1, floatArrayOf(50F,30F,40F,100F,150F,30F).toTypedArray())
+            replaceDimensionText(0, "测试啊")
+            changeScoreColor(1, Color.parseColor("#88879ddf"))
+            adjustItemScoreLevel(1, floatArrayOf(50F, 30F, 40F, 100F, 150F, 30F).toTypedArray())
         }
     }
 
