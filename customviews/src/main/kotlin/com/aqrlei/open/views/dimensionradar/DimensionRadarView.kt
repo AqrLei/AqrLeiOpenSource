@@ -13,20 +13,22 @@ import kotlin.math.PI
  */
 /**
  * @description: 雷达维度图
- * scoreLevel 评分级别
- * maxScore 最高评分
- * dimensionTextSize
- * dimensionTextList 评分维度 >=3
- * dimensionTextColorArray
- * dimensionScoreLevelArray 维度评分 this.size == dimensionTextList.size
- * dimensionRadarBackgroundColor
- * dimensionRadarScoreColorList
- * diagonalLineColor
- * diagonalLineWidth
- * sideLineColor
- * sideLineWidth
+ * @param scoreLevel 评分分级数
+ * @param maxScore 最高评分
+ * @param dimensionTextSize 维度标签文字大小
+ * @param dimensionTextList 评分维度标签列表 >=3
+ * @param dimensionTextColorArray 评分维度标签文字颜色列表
+ * @param dimensionScoreLevelArray 各个维度对应的评分列表
+ * @param dimensionRadarBackgroundColor 雷达维度图背景颜色
+ * @param dimensionRadarScoreColorList 评分区域的颜色列表
+ * @param diagonalLineColor 对角线的颜色
+ * @param diagonalLineWidth 对角先的宽度
+ * @param sideLineColor 边线的颜色
+ * @param sideLineWidth 边线的宽度
+ * @param rotateDegree 雷达维度图旋转的角度数
+ * @param drawScoreLevelStyle 评分区域颜色填充的样式
+ * @param maxSupportScoreNumber 最大支持的评分个数
  * */
-//TODO
 class DimensionRadarView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null) : View(context, attrs) {
