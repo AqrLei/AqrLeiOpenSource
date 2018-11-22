@@ -24,18 +24,23 @@ abstract class CustomProgressDialog(context: Context,
     protected open fun getIndeterminateDrawableRes(): Drawable? {
         return null
     }
-
+    protected open fun getMProgressbar():ProgressBar{
+        return ProgressBar(context)
+    }
+    protected open fun getDialogLayoutParams():ViewGroup.LayoutParams{
+       return  ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
     abstract fun bindProgressBar(parentView: View, progressBar: ProgressBar): View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val v = LayoutInflater.from(context).inflate(getLayoutRes(), null).apply {
-            progressBar = ProgressBar(context).apply {
+            progressBar = getMProgressbar().apply {
                 progressDrawable = getProgressDrawableRes() ?: progressDrawable
                 indeterminateDrawable = getIndeterminateDrawableRes() ?: indeterminateDrawable
             }
             bindProgressBar(this, progressBar)
         }
-        val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val lp = getDialogLayoutParams()
         bindAction(v)
         setContentView(v, lp)
     }
