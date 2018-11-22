@@ -20,6 +20,7 @@ import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
 import com.aqrlei.open.views.dialog.BottomDialog
 import com.aqrlei.open.views.dialog.CircleRotateProgressDialog
+import com.aqrlei.open.views.dialog.HorizontalProgressDialog
 import com.aqrlei.open.views.dialog.IPhoneStyleDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
@@ -75,9 +76,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dimensionRadarViewTest() {
-        CircleRotateProgressDialog(this).apply {
+      /*  CircleRotateProgressDialog(this).apply {
             show()
-        }
+        }*/
+        HorizontalProgressDialog(this).show()
         with(drV) {
             addDimensionText("测试")
             maxSupportScoreNumber = 2

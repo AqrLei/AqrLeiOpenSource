@@ -16,11 +16,11 @@ import androidx.annotation.StyleRes
 abstract class CustomProgressDialog(context: Context,
                                     @StyleRes style: Int) : Dialog(context, style) {
 
+    protected lateinit var progressBar: ProgressBar
     abstract fun getLayoutRes(): Int
     protected open fun getProgressDrawableRes(): Drawable? {
         return null
     }
-
     protected open fun getIndeterminateDrawableRes(): Drawable? {
         return null
     }
@@ -29,10 +29,11 @@ abstract class CustomProgressDialog(context: Context,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val v = LayoutInflater.from(context).inflate(getLayoutRes(), null).apply {
-            bindProgressBar(this, ProgressBar(context).apply {
+            progressBar = ProgressBar(context).apply {
                 progressDrawable = getProgressDrawableRes() ?: progressDrawable
                 indeterminateDrawable = getIndeterminateDrawableRes() ?: indeterminateDrawable
-            })
+            }
+            bindProgressBar(this, progressBar)
         }
         val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         bindAction(v)
