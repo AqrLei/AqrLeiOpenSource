@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun dimensionRadarViewTest(){
         with(drV){
-           //TODO  addDimensionText("测试") 未周全
+           addDimensionText("测试") //未周全
             maxSupportScoreNumber = 2
             replaceDimensionText(0,"测试啊")
             changeScoreColor(1,Color.parseColor("#88879ddf"))

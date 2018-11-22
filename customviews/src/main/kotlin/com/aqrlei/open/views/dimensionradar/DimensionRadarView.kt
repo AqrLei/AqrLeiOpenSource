@@ -44,56 +44,56 @@ class DimensionRadarView @JvmOverloads constructor(
         set(value) {
             if (value > 2 && value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
     var maxScore: Int = 100
         set(value) {
             if (value > 0 && value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
     var rotateDegree: Float = 0F
         set(value) {
             if (value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
     var dimensionTextSize: Int = DensityUtil.dip2px(14F)
         set(value) {
             if (value > 0 && value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
     var diagonalLineColor: Int = DEFAULT_LINE_COLOR
         set(value) {
             if (value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
     var diagonalLineWidth: Int = DensityUtil.dip2px(1F)
         set(value) {
             if (value > 0 && value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
     var sideLineColor: Int = DEFAULT_LINE_COLOR
         set(value) {
             if (value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
     var sideLineWidth: Int = DensityUtil.dip2px(1F)
         set(value) {
             if (value > 0 && value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
     var maxSupportScoreNumber: Int = 1
@@ -107,7 +107,7 @@ class DimensionRadarView @JvmOverloads constructor(
         set(value) {
             if (value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
     var drawScoreLevelStyle = DIMENSION_SCORE_DRAW_FULL
@@ -116,7 +116,7 @@ class DimensionRadarView @JvmOverloads constructor(
                 when (value) {
                     DIMENSION_SCORE_DRAW_FULL, DIMENSION_SCORE_DRAW_STROKE -> {
                         field = value
-                        postInvalidate()
+                        invalidate()
                     }
                     else -> {
                     }
@@ -128,9 +128,9 @@ class DimensionRadarView @JvmOverloads constructor(
     private val dimensionTextList = ArrayList<String>()
     private lateinit var dimensionTextColorArray: Array<Int?>
     private lateinit var dimensionScoreLevelArray: Array<Float>
-    private lateinit var scoreColorArray: Array<Int?>
+    private val scoreColorArray = ArrayList<Int?>()
 
-    private lateinit var supportScoreLevelArrays: Array<Array<Float>?>
+    private lateinit var supportScoreLevelArrays: Array<Array<Float>>
 
 
     private var isCanRefresh: Boolean = false
@@ -157,20 +157,20 @@ class DimensionRadarView @JvmOverloads constructor(
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.DimensionRadarView)?.run {
-            scoreLevel = getInteger(R.styleable.DimensionRadarView_scoreLevel, scoreLevel)
-            maxScore = getInteger(R.styleable.DimensionRadarView_maxScore, maxScore)
-            maxSupportScoreNumber = getInteger(R.styleable.DimensionRadarView_maxSupportScoreNumber,
-                    maxSupportScoreNumber)
-            supportScoreLevelArrays = arrayOfNulls(maxSupportScoreNumber)
 
-            dimensionTextSize = getDimensionPixelSize(
-                    R.styleable.DimensionRadarView_dimensionTextSize,
-                    dimensionTextSize)
-            rotateDegree = getFloat(R.styleable.DimensionRadarView_dimensionRotateDegree, rotateDegree)
-            drawScoreLevelStyle = getInteger(R.styleable.DimensionRadarView_scoreLevelDrawStyle, drawScoreLevelStyle)
             getTextArray(R.styleable.DimensionRadarView_dimensionTextArray)?.forEach {
                 dimensionTextList.add(it.toString())
             }
+
+            getTextArray(R.styleable.DimensionRadarView_dimensionRadarScoreColorArray)?.forEachIndexed { index, it ->
+                scoreColorArray.add(
+                        try {
+                            Color.parseColor(it?.toString())
+                        } catch (e: java.lang.IllegalArgumentException) {
+                            DEFAULT_SCORE_COLOR
+                        })
+            }
+
             dimensionTextColorArray = Array(divideCount) { DEFAULT_TEXT_COLOR }
             getTextArray(R.styleable.DimensionRadarView_dimensionTextColorArray)?.forEachIndexed { index, it ->
                 if (index < divideCount) {
@@ -182,6 +182,11 @@ class DimensionRadarView @JvmOverloads constructor(
                             }
                 }
             }
+
+            maxSupportScoreNumber = getInteger(R.styleable.DimensionRadarView_maxSupportScoreNumber, maxSupportScoreNumber)
+
+            supportScoreLevelArrays = Array(maxSupportScoreNumber) { Array(divideCount) { 0F } }
+
             dimensionScoreLevelArray = Array(divideCount) { 0F }
             getTextArray(R.styleable.DimensionRadarView_dimensionScoreLevelArray)?.forEachIndexed { index, it ->
                 if (index < divideCount) {
@@ -191,25 +196,15 @@ class DimensionRadarView @JvmOverloads constructor(
             }
             supportScoreLevelArrays[0] = dimensionScoreLevelArray
 
-            dimensionRadarBackgroundColor = getColor(
-                    R.styleable.DimensionRadarView_dimensionRadarBackgroundColor,
-                    dimensionRadarBackgroundColor)
+            scoreLevel = getInteger(R.styleable.DimensionRadarView_scoreLevel, scoreLevel)
+            maxScore = getInteger(R.styleable.DimensionRadarView_maxScore, maxScore)
 
-            scoreColorArray = Array(maxSupportScoreNumber) {
-                DEFAULT_SCORE_COLOR
-            }
-            getTextArray(R.styleable.DimensionRadarView_dimensionRadarScoreColorArray)?.forEachIndexed { index, it ->
-                if (index < maxSupportScoreNumber) {
-                    scoreColorArray[index] = try {
-                        Color.parseColor(it?.toString())
-                    } catch (e: java.lang.IllegalArgumentException) {
-                        DEFAULT_SCORE_COLOR
-                    }
-                }
-            }
+            dimensionTextSize = getDimensionPixelSize(R.styleable.DimensionRadarView_dimensionTextSize, dimensionTextSize)
+            rotateDegree = getFloat(R.styleable.DimensionRadarView_dimensionRotateDegree, rotateDegree)
+            drawScoreLevelStyle = getInteger(R.styleable.DimensionRadarView_scoreLevelDrawStyle, drawScoreLevelStyle)
+            dimensionRadarBackgroundColor = getColor(R.styleable.DimensionRadarView_dimensionRadarBackgroundColor, dimensionRadarBackgroundColor)
             diagonalLineColor = getColor(R.styleable.DimensionRadarView_diagonalLineColor, diagonalLineColor)
             diagonalLineWidth = getDimensionPixelSize(R.styleable.DimensionRadarView_diagonalLineWidth, diagonalLineWidth)
-
             sideLineColor = getColor(R.styleable.DimensionRadarView_sideLineColor, sideLineColor)
             sideLineWidth = getDimensionPixelSize(R.styleable.DimensionRadarView_sideLineWidth, sideLineWidth)
 
@@ -246,7 +241,7 @@ class DimensionRadarView @JvmOverloads constructor(
     fun replaceDimensionText(position: Int, text: String) {
         if (position < divideCount) {
             dimensionTextList[position] = text
-            postInvalidate()
+            invalidate()
         }
     }
 
@@ -260,7 +255,7 @@ class DimensionRadarView @JvmOverloads constructor(
         if (position < dimensionTextColorArray.size) {
             dimensionTextColorArray[position] = color
             if (!isInternalCall) {
-                postInvalidate()
+                invalidate()
             }
         }
     }
@@ -269,17 +264,14 @@ class DimensionRadarView @JvmOverloads constructor(
         textColorArray.forEachIndexed { index, color ->
             replaceTextColor(index, color, true)
         }
-        postInvalidate()
+        invalidate()
     }
 
     fun adjustItemSingleScoreLevel(parentIndex: Int, index: Int, scoreLevel: Float, isInternalCall: Boolean = false) {
         if (parentIndex < maxSupportScoreNumber && index < divideCount) {
-            if (supportScoreLevelArrays[parentIndex] == null) {
-                supportScoreLevelArrays[parentIndex] = Array(divideCount) { 0F }
-            }
-            supportScoreLevelArrays[parentIndex]?.set(index, scoreLevel)
+            supportScoreLevelArrays[parentIndex][index] = scoreLevel
             if (!isInternalCall) {
-                postInvalidate()
+                invalidate()
             }
         }
     }
@@ -289,7 +281,7 @@ class DimensionRadarView @JvmOverloads constructor(
             adjustItemSingleScoreLevel(parentIndex, index, fl, true)
         }
         if (!isInternalCall) {
-            postInvalidate()
+            invalidate()
         }
     }
 
@@ -304,7 +296,7 @@ class DimensionRadarView @JvmOverloads constructor(
         if (parentIndex < maxSupportScoreNumber) {
             scoreColorArray[parentIndex] = scoreColor
             if (!isInternalCall) {
-                postInvalidate()
+                invalidate()
             }
         }
     }
@@ -313,19 +305,28 @@ class DimensionRadarView @JvmOverloads constructor(
         scoreColorArray.forEachIndexed { index, i ->
             changeScoreColor(index, i, true)
         }
-        postInvalidate()
+        invalidate()
     }
 
     private fun maxSupportScoreNumberChanged() {
         if (isCanRefresh) {
-            supportScoreLevelArrays = supportScoreLevelArrays.copyOf(maxSupportScoreNumber)
-            scoreColorArray = scoreColorArray.copyOf(maxSupportScoreNumber)
+            val temp = supportScoreLevelArrays.copyOf(maxSupportScoreNumber)
+            supportScoreLevelArrays = Array(maxSupportScoreNumber) { Array(divideCount) { 0F } }
+            temp.forEachIndexed { index, floats ->
+                supportScoreLevelArrays[index] = floats ?: supportScoreLevelArrays[index]
+            }
+            invalidate()
         }
     }
 
     private fun divideCountChanged() {
         dimensionTextColorArray = dimensionTextColorArray.copyOf(divideCount)
-        postInvalidate()
+        supportScoreLevelArrays.forEachIndexed { index, floats ->
+            supportScoreLevelArrays[index] = floats.copyOf(divideCount).map {
+                it ?: 0F
+            }.toTypedArray()
+        }
+        invalidate()
     }
 
     private fun formatScoreLevel(scoreLevel: Float): Float {
@@ -356,13 +357,13 @@ class DimensionRadarView @JvmOverloads constructor(
         centerX = w / 2.0F
         centerY = h / 2.0F
         isCanRefresh = true
-        postInvalidate()
+        invalidate()
         super.onSizeChanged(w, h, oldw, oldh)
     }
 
-    override fun postInvalidate() {
+    override fun invalidate() {
         if (isCanRefresh) {
-            super.postInvalidate()
+            super.invalidate()
         }
     }
 
@@ -490,7 +491,7 @@ class DimensionRadarView @JvmOverloads constructor(
 
     private fun addFirstScoreLevelPoint(radian: Double, index: Int) {
         val scoreLevelArray = supportScoreLevelArrays[index]
-        scoreLevelArray?.run {
+        scoreLevelArray.run {
             val firstScoreRatio = this[0] / maxScore * 1.0
             val firstX = (centerX + radius * Math.sin(radian) * firstScoreRatio).toFloat()
             val firstY = (centerY - radius * Math.cos(radian) * firstScoreRatio).toFloat()
@@ -500,7 +501,7 @@ class DimensionRadarView @JvmOverloads constructor(
 
     private fun addScoreLevelPoint(radian: Double, index: Int, parentIndex: Int) {
         val scoreLevelArray = supportScoreLevelArrays[parentIndex]
-        scoreLevelArray?.run {
+        scoreLevelArray.run {
             val scoreRatio = this[index] / maxScore * 1.0
             val x = (centerX + radius * Math.sin(radian) * scoreRatio).toFloat()
             val y = (centerY - radius * Math.cos(radian) * scoreRatio).toFloat()
