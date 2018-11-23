@@ -42,6 +42,9 @@ class MainActivity : AppCompatActivity() {
                 2 -> customPopWindowTest()
                 3 -> customDialogTest()
                 4 -> bottomDialogTest()
+                5 -> showCircleProgress()
+                6 -> showHorizontalProgress()
+                7 -> dimensionRadarViewTest()
             }
         }
 
@@ -61,8 +64,11 @@ class MainActivity : AppCompatActivity() {
             addTab(newTab().setText("Banner"))
             addTab(newTab().setText("QRCode"))
             addTab(newTab().setText("CustomPop"))
-            addTab(newTab().setText("IPhoneStyleDialog"))
+            addTab(newTab().setText("IPhoneDialog"))
             addTab(newTab().setText("BottomDialog"))
+            addTab(newTab().setText("CircleProgress"))
+            addTab(newTab().setText("HorizontalProgress"))
+            addTab(newTab().setText("DimensionRadar"))
         }
         addTabListenerTv.setOnClickListener {
             labelTl.addOnTabSelectedListener(listener)
@@ -71,15 +77,20 @@ class MainActivity : AppCompatActivity() {
         removeTabListenerTv.setOnClickListener {
             labelTl.removeOnTabSelectedListener(listener)
             Toast.makeText(this, "remove done", Toast.LENGTH_SHORT).show()
-            dimensionRadarViewTest()
         }
     }
 
-    private fun dimensionRadarViewTest() {
-      /*  CircleRotateProgressDialog(this).apply {
+    private fun showCircleProgress() {
+        CircleRotateProgressDialog(this).apply {
             show()
-        }*/
+        }
+    }
+
+    private fun showHorizontalProgress() {
         HorizontalProgressDialog(this).show()
+    }
+
+    private fun dimensionRadarViewTest() {
         with(drV) {
             addDimensionText("测试")
             maxSupportScoreNumber = 2

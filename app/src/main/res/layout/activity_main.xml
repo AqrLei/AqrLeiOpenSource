@@ -40,7 +40,7 @@
         app:tabGravity="fill"
         app:tabIndicatorColor="@android:color/holo_green_light"
         app:tabIndicatorHeight="1dp"
-        app:tabMode="fixed"
+        app:tabMode="scrollable"
         app:tabSelectedTextColor="@android:color/holo_green_light"
         app:tabTextAppearance="@style/TabTextAppearance"
         app:tabTextColor="@android:color/background_dark" />
