@@ -431,7 +431,6 @@ class DimensionRadarView @JvmOverloads constructor(
         val side = radius * Math.abs(Math.sin(b)) * 2
         val diagonalPath = Path()
         val sidePath = Path()
-
         for (i in 0 until divideCount) {
             diagonalPath.reset()
             sidePath.reset()
@@ -540,19 +539,15 @@ class DimensionRadarView @JvmOverloads constructor(
         super.onRestoreInstanceState(state.superState)
         state.let { ss ->
             this.maxSupportScoreNumber = ss.maxSupportScoreNumber
-
             ss.dimensionTextList?.let {
                 this.dimensionTextList.clear()
                 this.dimensionTextList.addAll(it)
             }
-
             this.dimensionTextColorArray = ss.dimensionTextColorArray
-
             ss.scoreColorArray?.let {
                 this.scoreColorArray.clear()
                 this.scoreColorArray.addAll(it)
             }
-
             ss.supportScoreLevelArrays?.let {
                 this.supportScoreLevelArrays = it
             }
@@ -581,16 +576,11 @@ class DimensionRadarView @JvmOverloads constructor(
         private constructor(saveState: Parcel?) : super(saveState) {
             saveState?.run {
                 maxSupportScoreNumber = readInt()
-
                 dimensionTextList = readSerializable() as? ArrayList<String>
-
                 dimensionTextColorArray = IntArray(dimensionTextList?.size ?: 0)
                 readIntArray(dimensionTextColorArray)
-
                 scoreColorArray = readSerializable()  as? ArrayList<Int>
-
                 supportScoreLevelArrays = readSerializable() as? Array<FloatArray>
-
             }
         }
 
@@ -600,11 +590,9 @@ class DimensionRadarView @JvmOverloads constructor(
                 writeInt(maxSupportScoreNumber)
                 writeSerializable(dimensionTextList)
                 writeIntArray(dimensionTextColorArray)
-
                 writeSerializable(scoreColorArray)
                 writeSerializable(supportScoreLevelArrays)
             }
         }
-
     }
 }
