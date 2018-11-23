@@ -23,7 +23,7 @@ import android.view.View
  * @param defStyleRes 默认资源ID
  * @description: 画一个圆形或半圆的简单进度条
  * */
-
+//TODO improve
 @Suppress("unused")
 class RoundBar @JvmOverloads constructor(
         context: Context,
@@ -33,7 +33,6 @@ class RoundBar @JvmOverloads constructor(
      * 标明画的时候是当前进度开始还是从头开始
      * */
     companion object {
-
         /**异常销毁需要保存的数据的key*/
         private const val INSTANCE = "instance"
         private const val INSTANCE_BOOLEAN = "boolean"
