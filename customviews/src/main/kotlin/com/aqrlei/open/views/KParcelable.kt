@@ -1,4 +1,4 @@
-package com.aqrlei.open.utils
+package com.aqrlei.open.views
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -12,7 +12,7 @@ interface KParcelable : Parcelable {
 
 }
 
-inline fun <reified T> generateParcelable(crossinline parcel: (Parcel) -> T): Parcelable.Creator<T> {
+inline fun <reified T> generateCreator(crossinline parcel: (Parcel) -> T): Parcelable.Creator<T> {
     return object : Parcelable.Creator<T> {
         override fun createFromParcel(source: Parcel): T = parcel(source)
 

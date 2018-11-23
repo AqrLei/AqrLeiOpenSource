@@ -111,8 +111,7 @@ class MainActivity : AppCompatActivity() {
             configureNegativeButton("取消")
             configurePositiveButton("确定")
             configureNeutralButton("好的")
-            setOutCancelable(true)
-            setBackCancelable(true)
+            setMCancelable(true)
             show(supportFragmentManager, BottomDialog.DefaultBottomDialogAdapter(
                     this@MainActivity,
                     listOf("${(1.inv())}", "${2.inv()}", "${3.inv()}", formatOne,
@@ -209,7 +208,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun customDialogTest() {
         IPhoneStyleDialog.newInstance()
-                .setOutCancelable(false)
                 .configureTitle("提示")
                 .configureMsg("联系客户签约\n dddddd")
                 .configureNegativeButton("稍后联系")
@@ -219,7 +217,7 @@ class MainActivity : AppCompatActivity() {
                         action = {
                             Toast.makeText(this, "测试", Toast.LENGTH_SHORT).show()
                         })
-                .setOutCancelable(false)
+                .setMCancelable(false)
                 .show(supportFragmentManager)
     }
 

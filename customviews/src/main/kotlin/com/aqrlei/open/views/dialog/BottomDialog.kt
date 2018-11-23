@@ -28,15 +28,13 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
         fun newInstance() = BottomDialog()
 
         private const val TAG = "bottomDialog"
+        private var negativeAction: ((View) -> Unit)? = null
+        private var positiveAction: ((View) -> Unit)? = null
+        private var neutralAction: ((View) -> Unit)? = null
+        private var adapter: CommonRecyclerAdapter<*>? = null
     }
 
-    private var isOutCancelable: Boolean = false
-    private var isBackCancelable: Boolean = false
-
-    private var negativeAction: ((View) -> Unit)? = null
-    private var positiveAction: ((View) -> Unit)? = null
-    private var neutralAction: ((View) -> Unit)? = null
-    private var adapter: CommonRecyclerAdapter<*>? = null
+    private var isMCancelable: Boolean = false
     private var titleText: SpannableString? = null
     private var negativeText: SpannableString? = null
     private var positiveText: SpannableString? = null
@@ -68,13 +66,8 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
         return this
     }
 
-    override fun setOutCancelable(cancelable: Boolean): BottomDialog {
-        isOutCancelable = cancelable
-        return this
-    }
-
-    override fun setBackCancelable(cancelable: Boolean): BottomDialog {
-        isBackCancelable = cancelable
+    override fun setMCancelable(cancelable: Boolean): BottomDialog {
+        isMCancelable = cancelable
         return this
     }
 
@@ -89,9 +82,15 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.contentRv.adapter = this.adapter
-        isCancelable = isBackCancelable
-        setOutCancelable(isOutCancelable)
+        view.contentRv.adapter = adapter
+        savedInstanceState?.run {
+            isMCancelable = getBoolean(DialogInterface.CANCELABLE_KEY)
+            titleText = getCharSequence(DialogInterface.TITLE_KEY) as? SpannableString
+            negativeText = getCharSequence(DialogInterface.NEGATIVE_KEY) as? SpannableString
+            positiveText = getCharSequence(DialogInterface.POSITIVE_KEY) as? SpannableString
+            neutralText = getCharSequence(DialogInterface.NEUTRAL_KEY) as? SpannableString
+        }
+        isCancelable = isMCancelable
         titleText?.let {
             with(view.dialogTitleTv) {
                 text = it
@@ -141,6 +140,19 @@ class BottomDialog : BottomSheetDialogFragment(), DialogInterface<BottomDialog> 
         super.onStart()
         //设置隐藏软键盘
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (dialog?.isShowing == true) {
+            with(outState) {
+                putBoolean(DialogInterface.CANCELABLE_KEY, isMCancelable)
+                putCharSequence(DialogInterface.TITLE_KEY, titleText)
+                putCharSequence(DialogInterface.NEGATIVE_KEY, negativeText)
+                putCharSequence(DialogInterface.POSITIVE_KEY, positiveText)
+                putCharSequence(DialogInterface.NEUTRAL_KEY, neutralText)
+            }
+        }
     }
 
     class DefaultBottomDialogAdapter(context: Context,
