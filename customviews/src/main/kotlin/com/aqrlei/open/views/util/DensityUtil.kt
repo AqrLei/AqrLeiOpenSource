@@ -7,8 +7,9 @@ import android.content.res.Resources
  */
 object DensityUtil {
 
-    private val density: Float = Resources.getSystem().displayMetrics.density
 
+    private val metrics = Resources.getSystem().displayMetrics
+    private val density: Float = metrics.density
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
      * @param dpValue 虚拟像素
@@ -45,4 +46,7 @@ object DensityUtil {
     fun px2dp(pxValue: Int): Float {
         return pxValue / Resources.getSystem().displayMetrics.density
     }
+
+    fun screenWidth(): Int = metrics.widthPixels
+
 }

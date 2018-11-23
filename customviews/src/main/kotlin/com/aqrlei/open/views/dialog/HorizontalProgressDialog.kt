@@ -2,6 +2,7 @@ package com.aqrlei.open.views.dialog
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -18,17 +19,21 @@ class HorizontalProgressDialog(context: Context) :
     override fun bindProgressBar(parentView: View, progressBar: ProgressBar): View {
         if (parentView is ViewGroup) {
             parentView.addView(progressBar,
-                    ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(10F)))
+                    ViewGroup.LayoutParams((DensityUtil.screenWidth()*0.8).toInt(), DensityUtil.dip2px(5F)))
         }
         return parentView
+    }
+
+    override fun getMProgressbar(): ProgressBar {
+        return LayoutInflater.from(context).inflate(R.layout.horizontal_progressbar,null) as ProgressBar
     }
 
     override fun getProgressDrawableRes(): Drawable? {
         return context.resources.getDrawable(R.drawable.progress_horizontal)
     }
 
-    override fun getIndeterminateDrawableRes(): Drawable? {
-        return context.resources.getDrawable(android.R.drawable.progress_indeterminate_horizontal)
+    override fun getDialogLayoutParams(): ViewGroup.LayoutParams {
+        return ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,DensityUtil.dip2px(12F))
     }
 
     fun setProgress(progress: Int) {
