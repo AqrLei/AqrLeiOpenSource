@@ -2,6 +2,8 @@ package com.aqrlei.open.views.dimensionradar
 
 import android.content.Context
 import android.graphics.*
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.View
 import com.aqrlei.open.views.R
@@ -128,11 +130,11 @@ class DimensionRadarView @JvmOverloads constructor(
 
 
     private val dimensionTextList = ArrayList<String>()
-    private lateinit var dimensionTextColorArray: Array<Int?>
-    private lateinit var dimensionScoreLevelArray: Array<Float>
-    private val scoreColorArray = ArrayList<Int?>()
+    private lateinit var dimensionTextColorArray: IntArray
+    private lateinit var dimensionScoreLevelArray: FloatArray
+    private val scoreColorArray = ArrayList<Int>()
 
-    private lateinit var supportScoreLevelArrays: Array<Array<Float>>
+    private lateinit var supportScoreLevelArrays: Array<FloatArray>
 
 
     private var isCanRefresh: Boolean = false
@@ -173,7 +175,7 @@ class DimensionRadarView @JvmOverloads constructor(
                         })
             }
 
-            dimensionTextColorArray = Array(divideCount) { DEFAULT_TEXT_COLOR }
+            dimensionTextColorArray = IntArray(divideCount) { DEFAULT_TEXT_COLOR }
             getTextArray(R.styleable.DimensionRadarView_dimensionTextColorArray)?.forEachIndexed { index, it ->
                 if (index < divideCount) {
                     dimensionTextColorArray[index] =
@@ -187,9 +189,9 @@ class DimensionRadarView @JvmOverloads constructor(
 
             maxSupportScoreNumber = getInteger(R.styleable.DimensionRadarView_maxSupportScoreNumber, maxSupportScoreNumber)
 
-            supportScoreLevelArrays = Array(maxSupportScoreNumber) { Array(divideCount) { 0F } }
+            supportScoreLevelArrays = Array(maxSupportScoreNumber) { FloatArray(divideCount) }
 
-            dimensionScoreLevelArray = Array(divideCount) { 0F }
+            dimensionScoreLevelArray = FloatArray(divideCount)
             getTextArray(R.styleable.DimensionRadarView_dimensionScoreLevelArray)?.forEachIndexed { index, it ->
                 if (index < divideCount) {
                     dimensionScoreLevelArray[index] = formatScoreLevel(it?.toString()?.toFloatOrNull()
@@ -296,7 +298,13 @@ class DimensionRadarView @JvmOverloads constructor(
 
     fun changeScoreColor(parentIndex: Int, scoreColor: Int, isInternalCall: Boolean = false) {
         if (parentIndex < maxSupportScoreNumber) {
-            scoreColorArray[parentIndex] = scoreColor
+            if (parentIndex < scoreColorArray.size) {
+                scoreColorArray[parentIndex] = scoreColor
+            } else {
+                for (i in scoreColorArray.size..parentIndex) {
+                    scoreColorArray.add(scoreColor)
+                }
+            }
             if (!isInternalCall) {
                 invalidate()
             }
@@ -313,7 +321,7 @@ class DimensionRadarView @JvmOverloads constructor(
     private fun maxSupportScoreNumberChanged() {
         if (isCanRefresh) {
             val temp = supportScoreLevelArrays.copyOf(maxSupportScoreNumber)
-            supportScoreLevelArrays = Array(maxSupportScoreNumber) { Array(divideCount) { 0F } }
+            supportScoreLevelArrays = Array(maxSupportScoreNumber) { FloatArray(divideCount) }
             temp.forEachIndexed { index, floats ->
                 supportScoreLevelArrays[index] = floats ?: supportScoreLevelArrays[index]
             }
@@ -322,11 +330,13 @@ class DimensionRadarView @JvmOverloads constructor(
     }
 
     private fun divideCountChanged() {
-        dimensionTextColorArray = dimensionTextColorArray.copyOf(divideCount)
+        dimensionTextColorArray = dimensionTextColorArray.copyOf(divideCount).map {
+            if (it == 0) DEFAULT_TEXT_COLOR else it
+        }.toIntArray()
         supportScoreLevelArrays.forEachIndexed { index, floats ->
             supportScoreLevelArrays[index] = floats.copyOf(divideCount).map {
-                it ?: 0F
-            }.toTypedArray()
+                it
+            }.toFloatArray()
         }
         invalidate()
     }
@@ -340,7 +350,6 @@ class DimensionRadarView @JvmOverloads constructor(
             scoreLevel
         }
     }
-
 
     private fun addFirstMaxScoreLevelPoint(radian: Double) {
         val firstMaxScoreX = (centerX + radius * Math.sin(radian)).toFloat()
@@ -429,8 +438,7 @@ class DimensionRadarView @JvmOverloads constructor(
             val diagonalX = centerX
             val diagonalY = centerY - radius
             if (index == 0) {
-                drawText(canvas, diagonalX, diagonalY, dimensionTextList[i], dimensionTextColorArray[i]
-                        ?: DEFAULT_TEXT_COLOR)
+                drawText(canvas, diagonalX, diagonalY, dimensionTextList[i], dimensionTextColorArray[i])
             }
             val sideX = diagonalX + (side * Math.abs(Math.sin(c))).toFloat()
             val sideY = diagonalY + (side * Math.abs(Math.cos(c))).toFloat()
@@ -463,7 +471,7 @@ class DimensionRadarView @JvmOverloads constructor(
     private fun drawScoreLines(canvas: Canvas) {
         for (i in 0 until supportScoreLevelArrays.size) {
             canvas.drawPath(getScorePath(i), scorePaint.apply {
-                color = scoreColorArray[i] ?: DEFAULT_SCORE_COLOR
+                color = scoreColorArray[i]
             })
         }
     }
@@ -509,5 +517,95 @@ class DimensionRadarView @JvmOverloads constructor(
             val y = (centerY - radius * Math.cos(radian) * scoreRatio).toFloat()
             dimensionScoreLevelPointList.add(PointF(x, y))
         }
+    }
+
+    override fun onSaveInstanceState(): Parcelable? {
+        val superState = super.onSaveInstanceState()
+        return superState?.let {
+            SavedState(superState).also { ss ->
+                ss.maxSupportScoreNumber = this.maxSupportScoreNumber
+                ss.dimensionTextList = this.dimensionTextList
+                ss.dimensionTextColorArray = this.dimensionTextColorArray
+                ss.scoreColorArray = this.scoreColorArray
+                ss.supportScoreLevelArrays = this.supportScoreLevelArrays
+            }
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state !is SavedState) {
+            super.onRestoreInstanceState(state)
+            return
+        }
+        super.onRestoreInstanceState(state.superState)
+        state.let { ss ->
+            this.maxSupportScoreNumber = ss.maxSupportScoreNumber
+
+            ss.dimensionTextList?.let {
+                this.dimensionTextList.clear()
+                this.dimensionTextList.addAll(it)
+            }
+
+            this.dimensionTextColorArray = ss.dimensionTextColorArray
+
+            ss.scoreColorArray?.let {
+                this.scoreColorArray.clear()
+                this.scoreColorArray.addAll(it)
+            }
+
+            ss.supportScoreLevelArrays?.let {
+                this.supportScoreLevelArrays = it
+            }
+
+        }
+    }
+
+    class SavedState : View.BaseSavedState {
+        companion object {
+            @JvmField
+            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
+                override fun createFromParcel(source: Parcel?): SavedState = SavedState(source)
+
+                override fun newArray(size: Int): Array<SavedState?> {
+                    return arrayOfNulls(size)
+                }
+            }
+        }
+
+        internal var maxSupportScoreNumber: Int = 1
+        internal var dimensionTextList: ArrayList<String>? = null
+        internal lateinit var dimensionTextColorArray: IntArray
+        internal var scoreColorArray: ArrayList<Int>? = null
+        internal var supportScoreLevelArrays: Array<FloatArray>? = null
+
+        internal constructor(superState: Parcelable) : super(superState)
+        private constructor(saveState: Parcel?) : super(saveState) {
+            saveState?.run {
+                maxSupportScoreNumber = readInt()
+
+                dimensionTextList = readSerializable() as? ArrayList<String>
+
+                dimensionTextColorArray = IntArray(dimensionTextList?.size ?: 0)
+                readIntArray(dimensionTextColorArray)
+
+                scoreColorArray = readSerializable()  as? ArrayList<Int>
+
+                supportScoreLevelArrays = readSerializable() as? Array<FloatArray>
+
+            }
+        }
+
+        override fun writeToParcel(out: Parcel?, flags: Int) {
+            super.writeToParcel(out, flags)
+            out?.apply {
+                writeInt(maxSupportScoreNumber)
+                writeSerializable(dimensionTextList)
+                writeIntArray(dimensionTextColorArray)
+
+                writeSerializable(scoreColorArray)
+                writeSerializable(supportScoreLevelArrays)
+            }
+        }
+
     }
 }
