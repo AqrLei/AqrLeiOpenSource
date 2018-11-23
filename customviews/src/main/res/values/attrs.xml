@@ -8,7 +8,7 @@
         <attr name="defaultBanner" format="reference" />
     </declare-styleable>
     <declare-styleable name="RoundBar">
-        <attr name="backgroundColor" format="color" />
+        <attr name="roundBarBackgroundColor" format="color" />
         <attr name="progressColor" format="color" />
         <attr name="startDegree" format="float" />
         <attr name="sweepDegree" format="float" />

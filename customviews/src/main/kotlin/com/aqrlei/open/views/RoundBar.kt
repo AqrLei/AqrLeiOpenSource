@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.SweepGradient
-import android.os.Bundle
+import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.View
@@ -29,54 +29,105 @@ class RoundBar @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null) :
         View(context, attrs) {
-    /**
-     * 标明画的时候是当前进度开始还是从头开始
-     * */
     companion object {
-        /**异常销毁需要保存的数据的key*/
-        private const val INSTANCE = "instance"
-        private const val INSTANCE_BOOLEAN = "boolean"
-        private const val INSTANCE_DEGREE = "degree"
-
         private const val DEFAULT_BG_COLOR = "#bbbbbb"
         private const val DEFAULT_PROGRESS_COLOR = "#41a9f8"
 
         private const val GRADIENT_COLOR_START = "#21adf1"
         private const val GRADIENT_COLOR_END = "#2287ee"
+
+        //当前进度监听器,开启初始绘图动画时有效
+        var onDrawProgressChangeAction: ((Float) -> Unit)? = null
     }
 
     enum class CapStyle {
         BUTT, ROUND, SQUARE
     }
 
-    private var mGradientPositions: ArrayList<Float>? = null//渐变色对应的位置
+    //渐变色对应的位置
+    private var mGradientPositions: ArrayList<Float>? = null
+    //渐变色
+    private val mGradientListColor = ArrayList<Int>()
+    //背景颜色
+    var mRoundBarBackgroundColor: Int = 0
+        set(value) {
+            if (value != field) {
+                field = value
+                invalidate()
+            }
+        }
+    //进度颜色
+    var mProgressColor: Int = 0
+        set(value) {
+            if (value != field) {
+                field = value
+                invalidate()
+            }
+        }
+    //最大的进度
+    var mMaxProgress: Float = 10F
+        set(value) {
+            if (value >= 0 && value != field) {
+                field = value
+                progressChange()
+            }
+        }
+    //当前进度
+    var mCurrentProgress: Float = 5f
+        set(value) {
+            if (value >= 0 && value != field) {
+                field = value
+                progressChange()
+            }
+        }
+    //画的速度
+    var mAnimationV: Float = 0F
+        set(value) {
+            if (value != field) {
+                field = value
+                invalidate()
+            }
+        }
+    //进度条是否使用渐变色
+    var mIsUseGradientColor: Boolean = false
+        set(value) {
+            if (value != field) {
+                field = value
+                invalidate()
+            }
+        }
+    //第一次绘图时是否开启动画
+    var mIsOpenAnimation: Boolean = false
+        set(value) {
+            if (value != field) {
+                field = value
+                invalidate()
+            }
+        }
+    //画圆扫过的角度
+    var mSweepDegree: Float = 0F
+        private set
+    //圆半径
+    var mRadius: Float = 100F
+        private set
+    // 画布旋转的角度
+    var mRotateDegree: Float = 0F
+        private set
+    // 画圆开始的角度
+    var mStartDegree: Float = 0F
+        private set
     private val mPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)//画笔
-    private var mBackgroundColor: Int = 0//背景颜色
-    private var mProgressColor: Int = 0//进度颜色
-    private val mGradientListColor = ArrayList<Int>()//渐变色
-    private var mRadius: Float = 100F//圆半径
-    private var mMaxProgress: Float = 10F//最大的进度
-    private var mCurrentProgress: Float = 5f//当前进度
-    private var mIsOpenAnimation: Boolean = false//是否开启动画
-    private var mIsUseGradientColor: Boolean = false//是否使用渐变
-    private var mStartDegree: Float = 0F// 画圆开始的角度
-    private var mSweepDegree: Float = 0F//画圆扫过的角度
-    private var mRotateDegree: Float = 0F// 画布旋转的角度
     private var mProgressDegree: Float = 0F//当前进度该画的角度
     private var mDrawDegree: Float = 0F//画的起始角度
-    private var mAnimationV: Float = 0F//画的速度
-    private var mChangeListener: OnDrawProgressChangeListener? = null//当前进度监听器
-
+    private var isCanRefresh: Boolean = false
 
     init {
         mDrawDegree = 0F
 
         mPaint.style = Paint.Style.STROKE
         /**
-         * val typedArray = TintTypedArray.obtainStyledAttributes(
-        mContext,
-        attrs,
-        R.styleable.RoundBar)*/
+         * val typedArray = TintTypedArray.obtainStyledAttributes(mContext,attrs,R.styleable.RoundBar)
+         * */
         context.obtainStyledAttributes(attrs, R.styleable.RoundBar)?.run {
             getTextArray(R.styleable.RoundBar_positions)?.let {
                 if (it.isNotEmpty()) {
@@ -85,7 +136,6 @@ class RoundBar @JvmOverloads constructor(
                         mGradientPositions?.add(pos.toString().toFloat())
                     }
                 }
-
             }
             getTextArray(R.styleable.RoundBar_gradientColors)?.let {
                 it.forEach { color ->
@@ -95,45 +145,33 @@ class RoundBar @JvmOverloads constructor(
                 mGradientListColor.add(Color.parseColor(GRADIENT_COLOR_START))
                 mGradientListColor.add(Color.parseColor(GRADIENT_COLOR_END))
             }
-            setBackgroundColor(getColor(
-                    R.styleable.RoundBar_backgroundColor,
-                    Color.parseColor(DEFAULT_BG_COLOR)))
-            setProgressColor(
-                    getColor(R.styleable.RoundBar_progressColor,
-                            Color.parseColor(DEFAULT_PROGRESS_COLOR)))
-            setRadius(getFloat(R.styleable.RoundBar_radius, mRadius))
+            mRoundBarBackgroundColor = getColor(R.styleable.RoundBar_roundBarBackgroundColor, Color.parseColor(DEFAULT_BG_COLOR))
+            mProgressColor = getColor(R.styleable.RoundBar_progressColor, Color.parseColor(DEFAULT_PROGRESS_COLOR))
+            mRadius = getFloat(R.styleable.RoundBar_radius, mRadius)
             mMaxProgress = getFloat(R.styleable.RoundBar_maxProgress, mMaxProgress)
             mCurrentProgress = getFloat(R.styleable.RoundBar_progress, mCurrentProgress)
-            setOpenAnimation(getBoolean(R.styleable.RoundBar_openAnimation, false))
-            setUseGradientColor(getBoolean(R.styleable.RoundBar_useGradientColor, false))
-            setRoundWidth(getFloat(R.styleable.RoundBar_roundWidth, 10f))
+            mIsOpenAnimation = getBoolean(R.styleable.RoundBar_openAnimation, false)
+            mIsUseGradientColor = getBoolean(R.styleable.RoundBar_useGradientColor, false)
+            mStartDegree = getFloat(R.styleable.RoundBar_startDegree, 0f)
+            mSweepDegree = getFloat(R.styleable.RoundBar_sweepDegree, 360f)
+            mRotateDegree = getFloat(R.styleable.RoundBar_rotateDegree, 0f)
+            mAnimationV = getFloat(R.styleable.RoundBar_animationVelocity, 1f)
 
+            setRoundWidth(getFloat(R.styleable.RoundBar_roundWidth, 10f))
             setCapStyle(CapStyle.values()[getInteger(R.styleable.RoundBar_capStyle, CapStyle.BUTT.ordinal)])
-            setStartDegree(getFloat(R.styleable.RoundBar_startDegree, 0f))
-            setSweepDegree(getFloat(R.styleable.RoundBar_sweepDegree, 360f))
-            setRotateDegree(getFloat(R.styleable.RoundBar_rotateDegree, 0f))
-            setAnimationV(getFloat(R.styleable.RoundBar_animationVelocity, 1f))
+
             recycle()
         }
     }
 
-    fun setAnimationV(v: Float) {
-        mAnimationV = v
+    private fun progressChange() {
+        mProgressDegree = (mSweepDegree * (mCurrentProgress / mMaxProgress)).toInt().toFloat()
+        mProgressDegree = if (mProgressDegree > mSweepDegree) mSweepDegree else mProgressDegree
+        mDrawDegree = 0F
+        invalidate()
     }
 
-    fun setStartDegree(degree: Float) {
-        mStartDegree = degree
-    }
-
-    fun setSweepDegree(degree: Float) {
-        mSweepDegree = degree
-    }
-
-    fun setRotateDegree(degree: Float) {
-        mRotateDegree = degree
-    }
-
-    fun setCapStyle(capStyle: CapStyle) {
+    private fun setCapStyle(capStyle: CapStyle) {
         when (capStyle) {
             CapStyle.BUTT -> mPaint.strokeCap = Paint.Cap.BUTT
             CapStyle.ROUND -> mPaint.strokeCap = Paint.Cap.ROUND
@@ -141,73 +179,31 @@ class RoundBar @JvmOverloads constructor(
         }
     }
 
-    fun setRoundWidth(width: Float) {
+    private fun setRoundWidth(width: Float) {
         mPaint.strokeWidth = width
     }
 
-    fun setRadius(radius: Float) {
-        mRadius = radius
-    }
-
-    fun setGradientColor(gradientColor: ArrayList<Int>?) {
-        if (gradientColor?.size ?: 0 < 2) {
-            throw IllegalArgumentException("needs >= 2 number of colors")
+    fun setGradientColor(gradientColor: List<Int>) {
+        if (gradientColor.size < 2) {
+            return
         }
         mGradientListColor.clear()
-        mGradientListColor.addAll(gradientColor!!)
+        mGradientListColor.addAll(gradientColor)
+        invalidate()
     }
 
-    fun getGradientColor(): ArrayList<Int> {
-        return mGradientListColor
-    }
-
-    @Synchronized
-    fun setProgress(progress: Float) {
-        mCurrentProgress = progress
-        mProgressDegree = (mSweepDegree * (mCurrentProgress / mMaxProgress)).toInt().toFloat()
-        mProgressDegree = if (mProgressDegree > mSweepDegree) mSweepDegree else mProgressDegree
-        mDrawDegree = 0F
-        postInvalidate()
-    }
-
-    @Synchronized
-    fun setMaxProgress(maxProgress: Float) {
-        mMaxProgress = maxProgress
-        setProgress(mCurrentProgress)
-    }
-
-    @Synchronized
-    fun getProgress(): Float {
-        return mCurrentProgress
-    }
-
-    @Synchronized
-    fun getMaxProgress(): Float {
-        return mMaxProgress
-    }
-
-    fun setProgressColor(color: Int) {
-        mProgressColor = color
-    }
-
-    override fun setBackgroundColor(color: Int) {
-        mBackgroundColor = color
-    }
-
-    fun setUseGradientColor(useGradientColor: Boolean) {
-        mIsUseGradientColor = useGradientColor
-    }
-
-    fun setOpenAnimation(openAnimation: Boolean) {
-        mIsOpenAnimation = openAnimation
-    }
-
-    fun setOnDrawProgressListener(changeListener: OnDrawProgressChangeListener) {
-        mChangeListener = changeListener
+    fun setGradientPositions(gradientPositions: List<Float>) {
+        if (gradientPositions.size < 2) {
+            return
+        }
+        mGradientPositions = ArrayList()
+        mGradientPositions?.addAll(gradientPositions)
+        invalidate()
     }
 
     @SuppressLint("DrawAllocation", "NewApi")
     override fun onDraw(canvas: Canvas?) {
+        isCanRefresh = true
         super.onDraw(canvas)
         val width = measuredWidth
         val height = measuredHeight
@@ -221,7 +217,7 @@ class RoundBar @JvmOverloads constructor(
         canvas?.save()
         canvas?.rotate(mRotateDegree, centerX, centerY)
         mPaint.shader = null
-        mPaint.color = mBackgroundColor
+        mPaint.color = mRoundBarBackgroundColor
         canvas?.drawArc(left, top, right, bottom, rStartDegree,
                 mSweepDegree, false, mPaint)
         if (mIsUseGradientColor) {
@@ -230,7 +226,7 @@ class RoundBar @JvmOverloads constructor(
             mPaint.color = mProgressColor
         }
         if (mIsOpenAnimation) {
-            mChangeListener?.onDrawProgressChange(
+            onDrawProgressChangeAction?.invoke(
                     if (mDrawDegree >= mProgressDegree) mCurrentProgress
                     else (mCurrentProgress * mDrawDegree / mProgressDegree)
             )
@@ -246,43 +242,50 @@ class RoundBar @JvmOverloads constructor(
         canvas?.restore()
     }
 
-    override fun onSaveInstanceState(): Parcelable {
-        val bundle = Bundle()
-        bundle.putParcelable(INSTANCE, super.onSaveInstanceState())
-        val bool = booleanArrayOf(mIsOpenAnimation, mIsUseGradientColor)
-        val degrees = floatArrayOf(mStartDegree, mSweepDegree, mProgressDegree, mRotateDegree)
-
-        with(bundle) {
-            putBooleanArray(INSTANCE_BOOLEAN, bool)
-            putFloatArray(INSTANCE_DEGREE, degrees)
+    override fun invalidate() {
+        if (isCanRefresh) {
+            super.invalidate()
         }
-        return bundle
+    }
+
+    override fun onSaveInstanceState(): Parcelable? {
+        return super.onSaveInstanceState()?.let {
+            SavedState(it).apply {
+                currentProgress = mCurrentProgress
+            }
+        }
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
-        if (state is Bundle) {
-            with(state) {
-                getBooleanArray(INSTANCE_BOOLEAN)?.apply {
-                    mIsOpenAnimation = this[0]
-                    mIsUseGradientColor = this[1]
-                }
-                getFloatArray(INSTANCE_DEGREE)?.apply {
-                    mStartDegree = this[0]
-                    mSweepDegree = this[1]
-                    mProgressDegree = this[2]
-                    mRotateDegree = this[3]
-                }
-                super.onRestoreInstanceState(getParcelable(INSTANCE))
-            }
+        if (state !is SavedState) {
+            super.onRestoreInstanceState(state)
             return
         }
-        super.onRestoreInstanceState(state)
+        super.onRestoreInstanceState(state.superState)
+        this.mCurrentProgress = state.currentProgress
     }
 
-    /**
-     * 回调接口，传递 当前进度
-     * */
-    interface OnDrawProgressChangeListener {
-        fun onDrawProgressChange(currentProgress: Float)
+    class SavedState : View.BaseSavedState {
+        companion object {
+            @JvmField
+            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
+                override fun createFromParcel(source: Parcel?): SavedState = SavedState(source)
+                override fun newArray(size: Int): Array<SavedState?> {
+                    return arrayOfNulls(size)
+                }
+            }
+        }
+
+        internal var currentProgress: Float = 5f
+
+        internal constructor(superState: Parcelable) : super(superState)
+        private constructor(saveState: Parcel?) : super(saveState) {
+            currentProgress = saveState?.readFloat() ?: currentProgress
+        }
+
+        override fun writeToParcel(out: Parcel?, flags: Int) {
+            super.writeToParcel(out, flags)
+            out?.writeFloat(currentProgress)
+        }
     }
 }

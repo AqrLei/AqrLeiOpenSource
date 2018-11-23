@@ -556,7 +556,6 @@ class DimensionRadarView @JvmOverloads constructor(
             ss.supportScoreLevelArrays?.let {
                 this.supportScoreLevelArrays = it
             }
-
         }
     }
 
