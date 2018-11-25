@@ -8,4 +8,5 @@
     <color name="custom_view_text">#333333</color>
     <color name="custom_view_dialog_button_text">#1b8fe6</color>
     <color name="custom_translucent">#b0000000</color>
+    <color name="custom_full_translucent">#00000000</color>
 </resources>

@@ -9,24 +9,25 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/addTabListenerTv"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="addListener"
-            android:layout_height="match_parent" />
+            android:text="addListener" />
+
         <TextView
             android:id="@+id/removeTabListenerTv"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="removeListener"
-            android:layout_height="match_parent" />
+            android:text="removeListener" />
     </LinearLayout>
-
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/labelTl"
@@ -38,7 +39,7 @@
         app:tabGravity="fill"
         app:tabIndicatorColor="@android:color/holo_green_light"
         app:tabIndicatorHeight="1dp"
-        app:tabMode="fixed"
+        app:tabMode="scrollable"
         app:tabSelectedTextColor="@android:color/holo_green_light"
         app:tabTextAppearance="@style/TabTextAppearance"
         app:tabTextColor="@android:color/background_dark" />
@@ -46,6 +47,25 @@
     <include layout="@layout/act_layout_banner" />
 
     <include layout="@layout/act_layout_qrcode" />
+
+    <com.aqrlei.open.views.dimensionradar.DimensionRadarView
+        android:id="@+id/drV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:diagonalLineColor="@color/colorPrimary"
+        app:diagonalLineWidth="2dp"
+        app:dimensionRadarBackgroundColor="@color/colorDimensionBackground"
+        app:dimensionRadarScoreColorArray="@array/dimension_score_color"
+        app:dimensionRotateDegree="30"
+        app:dimensionScoreLevelArray="@array/dimension_score_level"
+        app:dimensionTextArray="@array/dimension_text"
+        app:dimensionTextColorArray="@array/dimension_text_color"
+        app:maxScore="200"
+        app:scoreLevel="5"
+        app:scoreLevelDrawStyle="full"
+        app:sideLineColor="@color/colorPrimary"
+        app:sideLineWidth="2dp" />
 
 
 </LinearLayout>

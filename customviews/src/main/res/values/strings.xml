@@ -4,4 +4,5 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_neutral">Neutral</string>
     <string name="dialog_title">Tips</string>
+    <string name="circle_rotate_tip">Loading...</string>
 </resources>

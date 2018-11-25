@@ -25,4 +25,8 @@
         <item name="android:layout_height">1px</item>
     </style>
 
+    <style name="CircleRotateProgressStyle" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/progress_circle_rotate</item>
+    </style>
+
 </resources>

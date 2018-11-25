@@ -19,6 +19,8 @@ import com.aqrlei.open.utils.qrcode.*
 import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
 import com.aqrlei.open.views.dialog.BottomDialog
+import com.aqrlei.open.views.dialog.CircleRotateProgressDialog
+import com.aqrlei.open.views.dialog.HorizontalProgressDialog
 import com.aqrlei.open.views.dialog.IPhoneStyleDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
@@ -40,6 +42,9 @@ class MainActivity : AppCompatActivity() {
                 2 -> customPopWindowTest()
                 3 -> customDialogTest()
                 4 -> bottomDialogTest()
+                5 -> showCircleProgress()
+                6 -> showHorizontalProgress()
+                7 -> dimensionRadarViewTest()
             }
         }
 
@@ -59,8 +64,11 @@ class MainActivity : AppCompatActivity() {
             addTab(newTab().setText("Banner"))
             addTab(newTab().setText("QRCode"))
             addTab(newTab().setText("CustomPop"))
-            addTab(newTab().setText("IPhoneStyleDialog"))
+            addTab(newTab().setText("IPhoneDialog"))
             addTab(newTab().setText("BottomDialog"))
+            addTab(newTab().setText("CircleProgress"))
+            addTab(newTab().setText("HorizontalProgress"))
+            addTab(newTab().setText("DimensionRadar"))
         }
         addTabListenerTv.setOnClickListener {
             labelTl.addOnTabSelectedListener(listener)
@@ -69,7 +77,26 @@ class MainActivity : AppCompatActivity() {
         removeTabListenerTv.setOnClickListener {
             labelTl.removeOnTabSelectedListener(listener)
             Toast.makeText(this, "remove done", Toast.LENGTH_SHORT).show()
+        }
+    }
 
+    private fun showCircleProgress() {
+        CircleRotateProgressDialog(this).apply {
+            show()
+        }
+    }
+
+    private fun showHorizontalProgress() {
+        HorizontalProgressDialog(this).show()
+    }
+
+    private fun dimensionRadarViewTest() {
+        with(drV) {
+            addDimensionText("测试")
+            maxSupportScoreNumber = 2
+            replaceDimensionText(0, "测试啊")
+            changeScoreColor(1, Color.parseColor("#88879ddf"))
+            adjustItemScoreLevel(1, floatArrayOf(50F, 30F, 40F, 100F, 150F, 30F).toTypedArray())
         }
     }
 
@@ -84,8 +111,7 @@ class MainActivity : AppCompatActivity() {
             configureNegativeButton("取消")
             configurePositiveButton("确定")
             configureNeutralButton("好的")
-            setOutCancelable(true)
-            setBackCancelable(true)
+            setMCancelable(true)
             show(supportFragmentManager, BottomDialog.DefaultBottomDialogAdapter(
                     this@MainActivity,
                     listOf("${(1.inv())}", "${2.inv()}", "${3.inv()}", formatOne,
@@ -182,7 +208,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun customDialogTest() {
         IPhoneStyleDialog.newInstance()
-                .setOutCancelable(false)
                 .configureTitle("提示")
                 .configureMsg("联系客户签约\n dddddd")
                 .configureNegativeButton("稍后联系")
@@ -192,7 +217,7 @@ class MainActivity : AppCompatActivity() {
                         action = {
                             Toast.makeText(this, "测试", Toast.LENGTH_SHORT).show()
                         })
-                .setOutCancelable(false)
+                .setMCancelable(false)
                 .show(supportFragmentManager)
     }
 

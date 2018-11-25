@@ -2,6 +2,8 @@ package com.aqrlei.open.views.dialog
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -11,7 +13,9 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.aqrlei.open.views.KParcelable
 import com.aqrlei.open.views.R
+import com.aqrlei.open.views.generateCreator
 import kotlinx.android.synthetic.main.layout_dialog_iphone.*
 
 
@@ -23,15 +27,14 @@ class IPhoneStyleDialog : DialogFragment(), DialogInterface<IPhoneStyleDialog> {
     companion object {
         private const val TAG = "IPhoneStyleDialog"
         fun newInstance() = IPhoneStyleDialog()
+        private var negativeAction: ((View) -> Unit)? = null
+        private var positiveAction: ((View) -> Unit)? = null
     }
 
-    private var isOutCancelable: Boolean = false
-    private var isBackCancelable: Boolean = false
+    private var isMCancelable: Boolean = false
     private var isNegativeButtonShow: Boolean = false
     private var isPositiveButtonShow: Boolean = false
 
-    private var negativeAction: ((View) -> Unit)? = null
-    private var positiveAction: ((View) -> Unit)? = null
 
     private var titleConfigure: TextConfigure? = null
     private var msgConfigure: TextConfigure? = null
@@ -86,20 +89,22 @@ class IPhoneStyleDialog : DialogFragment(), DialogInterface<IPhoneStyleDialog> {
         return this
     }
 
-    override fun setBackCancelable(cancelable: Boolean): IPhoneStyleDialog {
-        isBackCancelable = cancelable
+    override fun setMCancelable(cancelable: Boolean): IPhoneStyleDialog {
+        isMCancelable = cancelable
         return this
     }
-
-    override fun setOutCancelable(cancelable: Boolean): IPhoneStyleDialog {
-        isOutCancelable = cancelable
-        return this
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        isCancelable = isBackCancelable
-        setOutCancelable(isOutCancelable)
+        savedInstanceState?.run {
+            isMCancelable = getBoolean(DialogInterface.CANCELABLE_KEY)
+            titleConfigure = getParcelable(DialogInterface.TITLE_KEY)
+            negativeButtonConfigure = getParcelable(DialogInterface.NEGATIVE_KEY)
+            positiveButtonConfigure = getParcelable(DialogInterface.POSITIVE_KEY)
+            isNegativeButtonShow = getBoolean(DialogInterface.NEGATIVE_SHOW_KEY)
+            isPositiveButtonShow = getBoolean(DialogInterface.POSITIVE_SHOW_KEY)
+            msgConfigure = getParcelable(DialogInterface.MESSAGE_KEY)
+        }
+        isCancelable = isMCancelable
         titleConfigure?.apply { configureTextView(titleTv, this) }
         msgConfigure?.apply { configureTextView(msgTv, this) }
         negativeButtonConfigure?.apply { configureTextView(negativeButton, this) }
@@ -120,6 +125,21 @@ class IPhoneStyleDialog : DialogFragment(), DialogInterface<IPhoneStyleDialog> {
         dividerView.visibility = if (isNegativeButtonShow && isPositiveButtonShow) View.VISIBLE else View.GONE
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (dialog?.isShowing == true) {
+            with(outState) {
+                putBoolean(DialogInterface.CANCELABLE_KEY, isMCancelable)
+                putBoolean(DialogInterface.NEGATIVE_SHOW_KEY, isNegativeButtonShow)
+                putBoolean(DialogInterface.POSITIVE_SHOW_KEY, isPositiveButtonShow)
+                putParcelable(DialogInterface.TITLE_KEY, titleConfigure)
+                putParcelable(DialogInterface.MESSAGE_KEY, msgConfigure)
+                putParcelable(DialogInterface.NEGATIVE_KEY, negativeButtonConfigure)
+                putParcelable(DialogInterface.POSITIVE_KEY, positiveButtonConfigure)
+            }
+        }
+    }
+
     private fun configureTextView(view: TextView, configure: TextConfigure) {
         with(configure) {
             view.visibility = View.VISIBLE
@@ -130,5 +150,22 @@ class IPhoneStyleDialog : DialogFragment(), DialogInterface<IPhoneStyleDialog> {
     }
 
 
-    data class TextConfigure(var text: String, var textColor: Int, var textSize: Float)
+    data class TextConfigure(var text: String, var textColor: Int, var textSize: Float) : KParcelable {
+        companion object {
+            @JvmField
+            val CREATOR: Parcelable.Creator<TextConfigure> = generateCreator(::TextConfigure)
+        }
+
+        constructor(parcel: Parcel) : this(
+                parcel.readString() ?: "",
+                parcel.readInt(),
+                parcel.readFloat()
+        )
+
+        override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+            writeString(text)
+            writeInt(textColor)
+            writeFloat(textSize)
+        }
+    }
 }

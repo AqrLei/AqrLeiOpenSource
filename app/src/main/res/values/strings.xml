@@ -1,3 +1,39 @@
 <resources>
     <string name="app_name">OpenSource</string>
+    <string-array name="dimension_text">
+        <item>ceshi</item>
+        <item>ceshi</item>
+        <item>ceshi</item>
+        <item>ceshi</item>
+        <item>ceshi</item>
+        <item>ceshi</item>
+    </string-array>
+    <string-array name="dimension_score_level">
+        <item>80</item>
+        <item>60</item>
+        <item>90</item>
+        <item>50</item>
+        <item>30</item>
+        <item>20</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="dimension_text_color">
+        <item>#f5a8c2</item>
+        <item>#7e7578</item>
+        <item>#9f7584</item>
+        <item>#f582a9</item>
+        <item>#FF4081</item>
+        <item>#303F9F</item>
+        <item>#3F51B5</item>
+    </string-array>
+    <string-array name="dimension_score_color">
+        <item>#8800ff00</item>
+        <item>#88879ddf</item>
+        <item>#88bf899d</item>
+        <item>#88f582a9</item>
+        <item>#88FF4081</item>
+        <item>#88303F9F</item>
+        <item>#883F51B5</item>
+    </string-array>
 </resources>
