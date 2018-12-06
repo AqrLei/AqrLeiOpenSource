@@ -31,6 +31,8 @@ import kotlin.math.PI
  * @param drawScoreLevelStyle 评分区域颜色填充的样式
  * @param maxSupportScoreNumber 最大支持的评分个数
  * */
+
+//TODO improve
 class DimensionRadarView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null) : View(context, attrs) {
