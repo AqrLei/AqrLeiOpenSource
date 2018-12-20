@@ -15,6 +15,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MediatorLiveData
+import com.aqrlei.open.opensource.netlivedatacalladapter.sample.PhoneRepository
 import com.aqrlei.open.utils.qrcode.*
 import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                 5 -> showCircleProgress()
                 6 -> showHorizontalProgress()
                 7 -> dimensionRadarViewTest()
+                8 -> netTest()
             }
         }
 
@@ -69,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             addTab(newTab().setText("CircleProgress"))
             addTab(newTab().setText("HorizontalProgress"))
             addTab(newTab().setText("DimensionRadar"))
+            addTab(newTab().setText("NetTest"))
         }
         addTabListenerTv.setOnClickListener {
             labelTl.addOnTabSelectedListener(listener)
@@ -78,6 +82,20 @@ class MainActivity : AppCompatActivity() {
             labelTl.removeOnTabSelectedListener(listener)
             Toast.makeText(this, "remove done", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun netTest() {
+        val repo = PhoneRepository()
+        MediatorLiveData<Any>().addSource(repo.fetchPhoneInfo("18257167828")) {
+            it?.run {
+                if (isSuccessful) {
+                    it.body()
+                } else {
+
+                }
+            }
+        }
+
     }
 
     private fun showCircleProgress() {
