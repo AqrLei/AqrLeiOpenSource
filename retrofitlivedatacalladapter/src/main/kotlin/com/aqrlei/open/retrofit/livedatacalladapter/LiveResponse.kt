@@ -5,8 +5,10 @@ package com.aqrlei.open.retrofit.livedatacalladapter
  */
 class LiveResponse<T> {
     companion object {
+        @JvmStatic
         fun <T> success(body: T?): LiveResponse<T> = LiveResponse<T>().apply { response = body }
 
+        @JvmStatic
         fun <T> error(e: Throwable): LiveResponse<T> = LiveResponse<T>().apply { error = e }
     }
 

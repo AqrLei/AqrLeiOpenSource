@@ -11,6 +11,7 @@ import java.lang.reflect.Type
  */
 class LiveDataConverterFactory : Converter.Factory() {
     companion object {
+        @JvmStatic
         fun create() = LiveDataConverterFactory()
     }
 
