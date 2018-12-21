@@ -1,4 +1,4 @@
-package com.aqrlei.open.opensource.netlivedatacalladapter
+package com.aqrlei.open.retrofit.livedatacalladapter
 
 import okhttp3.ResponseBody
 import retrofit2.Converter

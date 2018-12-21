@@ -1,6 +1,5 @@
-package com.aqrlei.open.opensource.netlivedatacalladapter
+package com.aqrlei.open.retrofit.livedatacalladapter
 
-import androidx.lifecycle.LiveData
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
@@ -16,11 +15,11 @@ class LiveDataCallAdapterFactory : CallAdapter.Factory() {
     }
 
     override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit): CallAdapter<*, *>? {
-        if (getRawType(returnType) != LiveData::class.java) {
-            return null
+        if (getRawType(returnType) != LiveObservable::class.java) {
+            throw IllegalStateException("Response must be parametrized as LiveObservable<LiveResponse>")
         }
         if (returnType !is ParameterizedType) {
-            throw IllegalStateException("Response must be parametrized as LiveData<LiveResponse>")
+            throw IllegalStateException("Response must be parametrized as LiveObservable<LiveResponse>")
         }
 
         return LiveDataCallAdapter<ParameterizedType>(getParameterUpperBound(0, returnType))

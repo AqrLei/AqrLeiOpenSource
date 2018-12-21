@@ -1,8 +1,8 @@
 package com.aqrlei.open.opensource.netlivedatacalladapter.sample
 
 import android.os.Build
-import com.aqrlei.open.opensource.netlivedatacalladapter.LiveDataCallAdapterFactory
-import com.aqrlei.open.opensource.netlivedatacalladapter.LiveDataConverterFactory
+import com.aqrlei.open.retrofit.livedatacalladapter.LiveDataCallAdapterFactory
+import com.aqrlei.open.retrofit.livedatacalladapter.LiveDataConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

@@ -1,7 +1,7 @@
 package com.aqrlei.open.opensource.netlivedatacalladapter.sample
 
-import androidx.lifecycle.LiveData
-import com.aqrlei.open.opensource.netlivedatacalladapter.LiveResponse
+import com.aqrlei.open.retrofit.livedatacalladapter.LiveObservable
+import com.aqrlei.open.retrofit.livedatacalladapter.LiveResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -16,6 +16,6 @@ class ArticleRepository() {
 
 interface ArticleService {
     @GET("wxarticle/list/{id}/{page}/json")
-    fun fetchPhoneInfo(@Path("id") id: String, @Path("page") page: String): LiveData<LiveResponse<BaseRespBean<ArticleRespBean>>>
+    fun fetchPhoneInfo(@Path("id") id: String, @Path("page") page: String): LiveObservable<LiveResponse<BaseRespBean<ArticleRespBean>>>
 }
 
