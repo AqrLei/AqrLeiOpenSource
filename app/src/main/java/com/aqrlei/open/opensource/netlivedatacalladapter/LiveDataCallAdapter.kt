@@ -1,18 +1,16 @@
 package com.aqrlei.open.opensource.netlivedatacalladapter
 
 import androidx.lifecycle.LiveData
-import retrofit2.Call
-import retrofit2.CallAdapter
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.MutableLiveData
+import retrofit2.*
 import java.lang.reflect.Type
 
 /**
  * @author aqrlei on 2018/12/20
  */
-class LiveDataCallAdapter<R>(private val type: Type) : CallAdapter<R, LiveData<Response<R>>> {
-    override fun adapt(call: Call<R>): LiveData<Response<R>> {
-        val liveDataResponse = NetMutableLiveData<Response<R>>()
+class LiveDataCallAdapter<R>(private val type: Type) : CallAdapter<R, LiveData<LiveResponse<R>>> {
+    override fun adapt(call: Call<R>): LiveData<LiveResponse<R>> {
+        val liveDataResponse = MutableLiveData<LiveResponse<R>>()
         call.enqueue(LiveDataCallBack(liveDataResponse))
         return liveDataResponse
     }
@@ -21,15 +19,19 @@ class LiveDataCallAdapter<R>(private val type: Type) : CallAdapter<R, LiveData<R
         return type
     }
 
-    private class LiveDataCallBack<T>(private val liveData: NetMutableLiveData<Response<T>>) : Callback<T> {
+    private class LiveDataCallBack<T>(private val liveData: MutableLiveData<LiveResponse<T>>) : Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
             if (call.isCanceled) return
-            liveData.postValue(response)
+            if (response.isSuccessful) {
+                liveData.postValue(LiveResponse.success(response.body()))
+            } else {
+                liveData.postValue(LiveResponse.error(HttpException(response)))
+            }
         }
 
         override fun onFailure(call: Call<T>, t: Throwable) {
             if (call.isCanceled) return
-            liveData.error = t
+            liveData.postValue(LiveResponse.error(t))
         }
     }
 

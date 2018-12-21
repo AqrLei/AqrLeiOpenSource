@@ -16,7 +16,11 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MediatorLiveData
-import com.aqrlei.open.opensource.netlivedatacalladapter.sample.PhoneRepository
+import androidx.lifecycle.Observer
+import com.aqrlei.open.opensource.netlivedatacalladapter.LiveResponse
+import com.aqrlei.open.opensource.netlivedatacalladapter.sample.ArticleRepository
+import com.aqrlei.open.opensource.netlivedatacalladapter.sample.ArticleRespBean
+import com.aqrlei.open.opensource.netlivedatacalladapter.sample.BaseRespBean
 import com.aqrlei.open.utils.qrcode.*
 import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
@@ -59,10 +63,33 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
+    private val testObservable = MediatorLiveData<Any>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val testObserver = Observer<LiveResponse<BaseRespBean<ArticleRespBean>>> {
+            Log.d("NETTEST", "OBSERVER")
+            Log.d("NETTEST", "isSuccess: ${it.isSuccess}")
+            Log.d("NETTEST", "curPage: ${it.response?.data?.curPage}")
+            Log.d("NETTEST", "offset: ${it.response?.data?.offset}")
+            Log.d("NETTEST", "over: ${it.response?.data?.over}")
+            Log.d("NETTEST", "pageCount: ${it.response?.data?.pageCount}")
+            Log.d("NETTEST", "size: ${it.response?.data?.size}")
+            Log.d("NETTEST", "total: ${it.response?.data?.total}")
+            Log.d("NETTEST", "errorCode: ${it.response?.errorCode}")
+            Log.d("NETTEST", "errorMsg: ${it.response?.errorMsg}")
+            Log.d("NETTEST", "${it.error?.message}")
+
+            removeTabListenerTv.text = "Done"
+        }
+        ArticleRepository().fetchPhoneInfo("405", "1").apply {
+            observe(this@MainActivity, testObserver)
+           // cancel()
+        }
+
+
+
         labelTl.apply {
             addTab(newTab().setText("Banner"))
             addTab(newTab().setText("QRCode"))
@@ -85,17 +112,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun netTest() {
-        val repo = PhoneRepository()
-        MediatorLiveData<Any>().addSource(repo.fetchPhoneInfo("18257167828")) {
+        val repo = ArticleRepository()
+        testObservable.addSource(repo.fetchPhoneInfo("405", "1")) {
+            Log.d("NETTEST", "OBSERVER")
             it?.run {
-                if (isSuccessful) {
-                    it.body()
+                if (isSuccess) {
+                    Log.d("NETTEST", "$isSuccess")
+                    removeTabListenerTv.text = this.response?.data?.curPage.orEmpty()
+                    //testObservable.value = it.response
                 } else {
 
                 }
             }
         }
-
     }
 
     private fun showCircleProgress() {

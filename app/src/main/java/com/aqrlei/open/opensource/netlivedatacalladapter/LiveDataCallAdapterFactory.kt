@@ -20,7 +20,7 @@ class LiveDataCallAdapterFactory : CallAdapter.Factory() {
             return null
         }
         if (returnType !is ParameterizedType) {
-            throw IllegalStateException("Response must be parametrized as LiveData<Response>")
+            throw IllegalStateException("Response must be parametrized as LiveData<LiveResponse>")
         }
 
         return LiveDataCallAdapter<ParameterizedType>(getParameterUpperBound(0, returnType))
