@@ -12,10 +12,10 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MediatorLiveData
 import com.aqrlei.open.opensource.netlivedatacalladapter.sample.ArticleRepository
 import com.aqrlei.open.utils.qrcode.*
 import com.aqrlei.open.views.CustomPopupMenu
@@ -33,6 +33,10 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val loadingViewGroup by lazy { LayoutInflater.from(this).inflate(R.layout.progress_bar_loading, null) }
+
+    private val contentView: View
+        get() = window.decorView.findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
     private val listener = object : TabLayout.OnTabSelectedListener {
         override fun onTabSelected(p0: TabLayout.Tab?) {
             when (p0?.position) {
@@ -48,6 +52,7 @@ class MainActivity : AppCompatActivity() {
                 6 -> showHorizontalProgress()
                 7 -> dimensionRadarViewTest()
                 8 -> netTest()
+                9 -> loadingTest()
             }
         }
 
@@ -59,9 +64,16 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        (window.decorView.findViewById<ViewGroup>(android.R.id.content)).run {
+            addView(loadingViewGroup)
+
+        }
+
         labelTl.apply {
             addTab(newTab().setText("Banner"))
             addTab(newTab().setText("QRCode"))
@@ -72,6 +84,7 @@ class MainActivity : AppCompatActivity() {
             addTab(newTab().setText("HorizontalProgress"))
             addTab(newTab().setText("DimensionRadar"))
             addTab(newTab().setText("NetTest"))
+            addTab(newTab().setText("ContentProgressDialog"))
         }
         addTabListenerTv.setOnClickListener {
             labelTl.addOnTabSelectedListener(listener)
@@ -97,6 +110,16 @@ class MainActivity : AppCompatActivity() {
             Log.d("NETTEST", "errorMsg: ${it.response?.errorMsg}")
             Log.d("NETTEST", "${it.error?.message}")
             removeTabListenerTv.text = "Done"
+        }
+    }
+
+    private fun loadingTest() {
+        loadingViewGroup.visibility = if (loadingViewGroup.visibility == View.VISIBLE) {
+            contentView.isEnabled = true
+            View.GONE
+        } else {
+            contentView.isEnabled = false
+            View.VISIBLE
         }
     }
 
