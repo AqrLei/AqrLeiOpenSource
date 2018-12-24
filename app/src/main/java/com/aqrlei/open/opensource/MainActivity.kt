@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private val loadingViewGroup by lazy { LayoutInflater.from(this).inflate(R.layout.progress_bar_loading, null) }
 
     private val contentView: View
-        get() = window.decorView.findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
+        get() = findViewById(R.id.openMain)
     private val listener = object : TabLayout.OnTabSelectedListener {
         override fun onTabSelected(p0: TabLayout.Tab?) {
             when (p0?.position) {
@@ -115,10 +115,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadingTest() {
         loadingViewGroup.visibility = if (loadingViewGroup.visibility == View.VISIBLE) {
-            contentView.isEnabled = true
+
             View.GONE
         } else {
-            contentView.isEnabled = false
+            loadingViewGroup.setOnClickListener(null)
             View.VISIBLE
         }
     }
