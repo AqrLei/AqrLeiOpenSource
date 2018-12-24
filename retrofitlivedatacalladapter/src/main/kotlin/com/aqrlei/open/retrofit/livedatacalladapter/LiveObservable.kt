@@ -1,6 +1,7 @@
 package com.aqrlei.open.retrofit.livedatacalladapter
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import retrofit2.Call
@@ -8,7 +9,7 @@ import retrofit2.Call
 /**
  * @author aqrlei on 2018/12/21
  */
- class LiveObservable<T> : LiveObservableSource {
+class LiveObservable<T> : LiveObservableSource {
     var call: Call<*>? = null
     var isCanceled: Boolean = false
         private set
@@ -21,6 +22,12 @@ import retrofit2.Call
 
     fun observable(lifecycleOwner: LifecycleOwner, action: (T) -> Unit) {
         liveData.observe(lifecycleOwner, Observer(action))
+    }
+
+    fun observable(observer: MediatorLiveData<T>, action: (MediatorLiveData<T>, T?) -> Unit) {
+        observer.addSource(this.liveData) {
+            action(observer, it)
+        }
     }
 
     fun onComplete(data: T) {
