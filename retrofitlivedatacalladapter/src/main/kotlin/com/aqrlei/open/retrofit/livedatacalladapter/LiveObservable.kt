@@ -24,7 +24,7 @@ class LiveObservable<T> : LiveObservableSource {
         liveData.observe(lifecycleOwner, Observer(action))
     }
 
-    fun observable(observer: MediatorLiveData<T>, action: (MediatorLiveData<T>, T?) -> Unit) {
+    fun observable(observer: MediatorLiveData<Any>, action: (MediatorLiveData<Any>, T?) -> Unit) {
         observer.addSource(this.liveData) {
             action(observer, it)
         }
