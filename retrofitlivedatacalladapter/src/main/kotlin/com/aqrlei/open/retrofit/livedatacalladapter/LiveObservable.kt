@@ -20,14 +20,12 @@ class LiveObservable<T> : LiveObservableSource {
         call?.cancel()
     }
 
-    fun observable(lifecycleOwner: LifecycleOwner, action: (T) -> Unit) {
+    fun observable(lifecycleOwner: LifecycleOwner, action: (T?) -> Unit) {
         liveData.observe(lifecycleOwner, Observer(action))
     }
 
-    fun observable(observer: MediatorLiveData<Any>, action: (MediatorLiveData<Any>, T?) -> Unit) {
-        observer.addSource(this.liveData) {
-            action(observer, it)
-        }
+    fun observable(observer: MediatorLiveData<Any>, action: (T?) -> Unit) {
+        observer.addSource(this.liveData, Observer(action))
     }
 
     fun onComplete(data: T) {
