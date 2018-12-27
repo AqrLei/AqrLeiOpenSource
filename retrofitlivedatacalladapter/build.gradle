@@ -48,6 +48,18 @@ dependencies {
     implementation deps.retrofit2.retrofit
 }
 
+task makeJar(type: Copy) {
+    delete 'build/outputs/jar/aqrleiopen-livedatacalladapter.jar'
+
+    from('build/intermediates/packaged-classes/release/')
+    into('build/outputs/jar')
+
+    include('classes.jar')
+
+    rename('classes.jar', 'aqrleiopen-livedatacalladapter.jar')
+}
+makeJar.dependsOn(build)
+
 def siteUrl = 'https://github.com/AqrLei/OpenSource'
 
 def gitUrl = 'https://github.com/AqrLei/OpenSource.git'
