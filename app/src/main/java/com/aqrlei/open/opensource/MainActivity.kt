@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun netTest() {
-        ArticleRepository().fetchPhoneInfo("405", "1").observable(this) {
+        ArticleRepository().fetchPhoneInfo("405", "1").observable {
             Log.d("NETTEST", "OBSERVER")
             Log.d("NETTEST", "isSuccess: ${it?.isSuccess}")
             Log.d("NETTEST", "curPage: ${it?.response?.data?.curPage}")
@@ -111,6 +111,20 @@ class MainActivity : AppCompatActivity() {
             Log.d("NETTEST", "${it?.error?.message}")
             removeTabListenerTv.text = "Done"
         }
+        /*    ArticleRepository().fetchPhoneInfo("405", "1").observable(this) {
+                Log.d("NETTEST", "OBSERVER")
+                Log.d("NETTEST", "isSuccess: ${it?.isSuccess}")
+                Log.d("NETTEST", "curPage: ${it?.response?.data?.curPage}")
+                Log.d("NETTEST", "offset: ${it?.response?.data?.offset}")
+                Log.d("NETTEST", "over: ${it?.response?.data?.over}")
+                Log.d("NETTEST", "pageCount: ${it?.response?.data?.pageCount}")
+                Log.d("NETTEST", "size: ${it?.response?.data?.size}")
+                Log.d("NETTEST", "total: ${it?.response?.data?.total}")
+                Log.d("NETTEST", "errorCode: ${it?.response?.errorCode}")
+                Log.d("NETTEST", "errorMsg: ${it?.response?.errorMsg}")
+                Log.d("NETTEST", "${it?.error?.message}")
+                removeTabListenerTv.text = "Done"
+            }*/
     }
 
     private fun loadingTest() {
