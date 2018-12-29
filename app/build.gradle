@@ -41,10 +41,6 @@ dependencies {
     implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
     implementation deps.androidx.constraint
-    implementation deps.lifecycle.extensions
-    implementation deps.retrofit2.retrofit
-    implementation deps.retrofit2.gsonConverter
-    implementation deps.okhttp.logging
     testImplementation deps.test.junit
     androidTestImplementation deps.test.runner
     androidTestImplementation deps.test.espresso
