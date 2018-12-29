@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun netTest() {
-        ArticleRepository().fetchPhoneInfo("405", "1").observable {
+        ArticleRepository().fetchPhoneInfo("405", "1").observe {
             Log.d("NETTEST", "OBSERVER")
             Log.d("NETTEST", "isSuccess: ${it?.isSuccess}")
             Log.d("NETTEST", "curPage: ${it?.response?.data?.curPage}")
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("NETTEST", "${it?.error?.message}")
             removeTabListenerTv.text = "Done"
         }
-        /*    ArticleRepository().fetchPhoneInfo("405", "1").observable(this) {
+        /*    ArticleRepository().fetchPhoneInfo("405", "1").observe(this) {
                 Log.d("NETTEST", "OBSERVER")
                 Log.d("NETTEST", "isSuccess: ${it?.isSuccess}")
                 Log.d("NETTEST", "curPage: ${it?.response?.data?.curPage}")

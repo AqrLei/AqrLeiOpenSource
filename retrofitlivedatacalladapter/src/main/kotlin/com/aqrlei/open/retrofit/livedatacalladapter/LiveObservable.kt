@@ -20,7 +20,7 @@ class LiveObservable<T> : LiveObservableSource {
         call?.cancel()
     }
 
-    fun observable(action: (T?) -> Unit) {
+    fun observe(action: (T?) -> Unit) {
         liveData.observeForever(object : Observer<T> {
             override fun onChanged(t: T) {
                 action(t)
@@ -34,11 +34,11 @@ class LiveObservable<T> : LiveObservableSource {
      * should invoked observe(LifecycleOwner,Observe) or observeForever(Observe) already,
      * means have a active Observe before call addSource().
      * */
-    fun observable(mediatorLiveData: MediatorLiveData<Any>, action: (T?) -> Unit) {
+    fun observe(mediatorLiveData: MediatorLiveData<Any>, action: (T?) -> Unit) {
         mediatorLiveData.addSource(this.liveData, Observer(action))
     }
 
-    fun observable(lifecycleOwner: LifecycleOwner, action: (T?) -> Unit) {
+    fun observe(lifecycleOwner: LifecycleOwner, action: (T?) -> Unit) {
         liveData.observe(lifecycleOwner, Observer(action))
     }
 
