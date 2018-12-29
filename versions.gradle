@@ -22,7 +22,7 @@ build_versions.target_sdk = 28
 ext.build_versions = build_versions
 
 def versions = [:]
-versions.kotlin = "1.3.10"
+versions.kotlin = "1.3.11"
 versions.kotlin_coroutines = "1.0.0"
 
 versions.zxing_core = "3.3.0"
@@ -41,13 +41,20 @@ versions.maven_plugin = "2.1"
 versions.bintray_plugin = "1.7.3"
 versions.dokka_plugin = "0.9.17"
 
+versions.lifecycle = "1.1.1"
+versions.retrofit2 = "2.5.0"
+versions.okhttp = "3.11.0"
+
+versions.livedataadapter = "1.1.2"
+
+
 def deps = [:]
 deps.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
 deps.maven_plugin = "com.github.dcendents:android-maven-gradle-plugin:$versions.maven_plugin"
 deps.bintray_plugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:$versions.bintray_plugin"
 deps.dokka_plugin = "org.jetbrains.dokka:dokka-android-gradle-plugin:$versions.dokka_plugin"
 deps.material = "com.google.android.material:material:$versions.material"
-
+deps.livedataAdapter = "com.github.leonardoxh:retrofit2-livedata-adapter:$versions.livedataadapter"
 def test = [:]
 test.junit = "junit:junit:$versions.junit"
 test.runner = "androidx.test:runner:$versions.test_runner"
@@ -61,6 +68,9 @@ androidx.constraint = "androidx.constraintlayout:constraintlayout:$versions.cons
 androidx.fragment = "androidx.fragment:fragment:$versions.fragment"
 deps.androidx  = androidx
 
+def lifecycle = [:]
+lifecycle.extensions = "android.arch.lifecycle:extensions:$versions.lifecycle"
+deps.lifecycle = lifecycle
 
 
 def kotlin = [:]
@@ -76,4 +86,12 @@ def zxing = [:]
 zxing.core = "com.google.zxing:core:$versions.zxing_core"
 deps.zxing = zxing
 
+def retrofit2 = [:]
+retrofit2.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit2"
+retrofit2.gsonConverter = "com.squareup.retrofit2:converter-gson:$versions.retrofit2"
+deps.retrofit2 = retrofit2
+
+def okhttp = [:]
+okhttp.logging = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+deps.okhttp = okhttp
 ext.deps = deps
