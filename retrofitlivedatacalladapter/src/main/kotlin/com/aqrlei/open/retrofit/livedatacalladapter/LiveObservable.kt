@@ -1,6 +1,7 @@
 package com.aqrlei.open.retrofit.livedatacalladapter
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import retrofit2.Call
@@ -26,6 +27,13 @@ class LiveObservable<T> : LiveObservableSource {
                 liveData.removeObserver(this)
             }
         })
+    }
+
+    /**
+     * @param mediatorLiveData should invoked observe(LifecycleOwner,Observe) or observeForever(Observe) already
+     * */
+    fun observable(mediatorLiveData: MediatorLiveData<Any>, action: (T?) -> Unit) {
+        mediatorLiveData.addSource(this.liveData, Observer(action))
     }
 
     fun observable(lifecycleOwner: LifecycleOwner, action: (T?) -> Unit) {
