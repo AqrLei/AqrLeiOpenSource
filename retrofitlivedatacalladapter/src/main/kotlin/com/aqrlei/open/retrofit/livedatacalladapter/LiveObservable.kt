@@ -30,7 +30,9 @@ class LiveObservable<T> : LiveObservableSource {
     }
 
     /**
-     * @param mediatorLiveData should invoked observe(LifecycleOwner,Observe) or observeForever(Observe) already
+     * @param mediatorLiveData
+     * should invoked observe(LifecycleOwner,Observe) or observeForever(Observe) already,
+     * means have a active Observe before call addSource().
      * */
     fun observable(mediatorLiveData: MediatorLiveData<Any>, action: (T?) -> Unit) {
         mediatorLiveData.addSource(this.liveData, Observer(action))
