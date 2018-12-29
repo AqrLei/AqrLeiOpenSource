@@ -2,11 +2,7 @@ package com.aqrlei.open.opensource
 
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -16,8 +12,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.aqrlei.open.opensource.netlivedatacalladapter.sample.ArticleRepository
-import com.aqrlei.open.utils.qrcode.*
 import com.aqrlei.open.views.CustomPopupMenu
 import com.aqrlei.open.views.banner.BannerView
 import com.aqrlei.open.views.dialog.BottomDialog
@@ -26,7 +20,6 @@ import com.aqrlei.open.views.dialog.HorizontalProgressDialog
 import com.aqrlei.open.views.dialog.IPhoneStyleDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.act_layout_banner.*
-import kotlinx.android.synthetic.main.act_layout_qrcode.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.DateFormat
 import java.util.*
@@ -35,8 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private val loadingViewGroup by lazy { LayoutInflater.from(this).inflate(R.layout.progress_bar_loading, null) }
 
-    private val contentView: View
-        get() = findViewById(R.id.openMain)
+
     private val listener = object : TabLayout.OnTabSelectedListener {
         override fun onTabSelected(p0: TabLayout.Tab?) {
             when (p0?.position) {
@@ -44,15 +36,13 @@ class MainActivity : AppCompatActivity() {
                     labelTl.removeOnTabSelectedListener(this)
                     bannerTest()
                 }
-                1 -> qrCodeTest()
-                2 -> customPopWindowTest()
-                3 -> customDialogTest()
-                4 -> bottomDialogTest()
-                5 -> showCircleProgress()
-                6 -> showHorizontalProgress()
-                7 -> dimensionRadarViewTest()
-                8 -> netTest()
-                9 -> loadingTest()
+                1 -> customPopWindowTest()
+                2 -> customDialogTest()
+                3 -> bottomDialogTest()
+                4 -> showCircleProgress()
+                5 -> showHorizontalProgress()
+                6 -> dimensionRadarViewTest()
+                7 -> loadingTest()
             }
         }
 
@@ -76,14 +66,12 @@ class MainActivity : AppCompatActivity() {
 
         labelTl.apply {
             addTab(newTab().setText("Banner"))
-            addTab(newTab().setText("QRCode"))
             addTab(newTab().setText("CustomPop"))
             addTab(newTab().setText("IPhoneDialog"))
             addTab(newTab().setText("BottomDialog"))
             addTab(newTab().setText("CircleProgress"))
             addTab(newTab().setText("HorizontalProgress"))
             addTab(newTab().setText("DimensionRadar"))
-            addTab(newTab().setText("NetTest"))
             addTab(newTab().setText("ContentProgressDialog"))
         }
         addTabListenerTv.setOnClickListener {
@@ -96,36 +84,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun netTest() {
-        ArticleRepository().fetchPhoneInfo("405", "1").observe {
-            Log.d("NETTEST", "OBSERVER")
-            Log.d("NETTEST", "isSuccess: ${it?.isSuccess}")
-            Log.d("NETTEST", "curPage: ${it?.response?.data?.curPage}")
-            Log.d("NETTEST", "offset: ${it?.response?.data?.offset}")
-            Log.d("NETTEST", "over: ${it?.response?.data?.over}")
-            Log.d("NETTEST", "pageCount: ${it?.response?.data?.pageCount}")
-            Log.d("NETTEST", "size: ${it?.response?.data?.size}")
-            Log.d("NETTEST", "total: ${it?.response?.data?.total}")
-            Log.d("NETTEST", "errorCode: ${it?.response?.errorCode}")
-            Log.d("NETTEST", "errorMsg: ${it?.response?.errorMsg}")
-            Log.d("NETTEST", "${it?.error?.message}")
-            removeTabListenerTv.text = "Done"
-        }
-        /*    ArticleRepository().fetchPhoneInfo("405", "1").observe(this) {
-                Log.d("NETTEST", "OBSERVER")
-                Log.d("NETTEST", "isSuccess: ${it?.isSuccess}")
-                Log.d("NETTEST", "curPage: ${it?.response?.data?.curPage}")
-                Log.d("NETTEST", "offset: ${it?.response?.data?.offset}")
-                Log.d("NETTEST", "over: ${it?.response?.data?.over}")
-                Log.d("NETTEST", "pageCount: ${it?.response?.data?.pageCount}")
-                Log.d("NETTEST", "size: ${it?.response?.data?.size}")
-                Log.d("NETTEST", "total: ${it?.response?.data?.total}")
-                Log.d("NETTEST", "errorCode: ${it?.response?.errorCode}")
-                Log.d("NETTEST", "errorMsg: ${it?.response?.errorMsg}")
-                Log.d("NETTEST", "${it?.error?.message}")
-                removeTabListenerTv.text = "Done"
-            }*/
-    }
 
     private fun loadingTest() {
         loadingViewGroup.visibility = if (loadingViewGroup.visibility == View.VISIBLE) {
@@ -177,67 +135,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun qrCodeTest() {
-        bannerCl.visibility = View.GONE
-        qrcodeCl.visibility = View.VISIBLE
-        val qrCode = QRCode.Builder()
-                .addContext(this)
-                .addLogoAdapterFactory(RoundLogoAdapter.Factory())
-                .addContainerConfigure(QRContainer.ContainerConfigure(width = 288F, height = 353F))
-                .addQRConfigure(QRContent.QRConfigure(width = 192F, height = 192F, topMargin = 83F))
-                .addTextConfigure(QRText.TextConfigure(topOrBottomMargin = 33F), QRText.TextConfigure(topOrBottomMargin = 30F))
-                .build()
-
-        button.setOnClickListener {
-            qrCode?.run {
-                wipeAll()
-                refreshContainer(QRContainer.ContainerConfigure(width = 288F, height = 353F))
-                refreshContent(QRContent.QRConfigure(topMargin = 83F))
-                refreshTopTextConfig(QRText.TextConfigure(topOrBottomMargin = 33F))
-                refreshBottomTextConfig(QRText.TextConfigure(topOrBottomMargin = 30F))
-                addLogoCreator {
-                    getBitmapFromRes()
-                }
-                drawQRContent("https://www.baidu.com/")
-                drawText(topContent = "这就是一个测试", bottomContent = "这是一个测试啊")
-                qrCodeIv.setImageBitmap(get())
-            }
-        }
-        refreshQrCode.setOnClickListener {
-            qrCode?.run {
-                wipeAll()
-                refreshContainer(QRContainer.ContainerConfigure(width = 288F, height = 315F))
-                refreshContent(QRContent.QRConfigure(topMargin = 43F))
-                refreshTopTextConfig(null)
-                refreshBottomTextConfig(QRText.TextConfigure(topOrBottomMargin = 33F))
-                addLogoCreator {
-                    getBitmapFromRes()
-                }
-                drawQRContent("https://www.baidu.com/")
-                drawText(topContent = "这就是一个测试", bottomContent = "这是一个测试啊")
-                qrCodeIv.setImageBitmap(get())
-            }
-
-        }
-    }
-
-    private fun getBitmapFromRes(): Bitmap? {
-        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            val drawable = getDrawable(R.mipmap.ic_launcher)
-
-            drawable?.let {
-                val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth,
-                        drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-                val canvas = Canvas(bitmap)
-                drawable.setBounds(0, 0, canvas.width, canvas.height)
-                drawable.draw(canvas)
-                bitmap
-            }
-        } else {
-            BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
-        }
-    }
-
     private fun customPopWindowTest() {
         CustomPopupMenu.Builder
                 .setPopCorner(CustomPopupMenu.PopCorner.BOTH_NOT_SHOW)
@@ -280,7 +177,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun bannerTest() {
         bannerCl.visibility = View.VISIBLE
-        qrcodeCl.visibility = View.GONE
         val bannerList = ArrayList<Int>().apply { add(R.drawable.banner_zero) }
         refreshBanner.setOnClickListener {
             bannerList.addAll(listOf(R.drawable.banner_one, R.drawable.banner_two, R.drawable.banner_three, R.drawable.banner_four))

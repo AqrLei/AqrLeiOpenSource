@@ -47,8 +47,6 @@
 
     <include layout="@layout/act_layout_banner" />
 
-    <include layout="@layout/act_layout_qrcode" />
-
     <com.aqrlei.open.views.dimensionradar.DimensionRadarView
         android:id="@+id/drV"
         android:layout_width="match_parent"

@@ -37,8 +37,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':customviews')
-    implementation project(':utils')
-    implementation project(':retrofitlivedatacalladapter')
     implementation deps.material
     implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
