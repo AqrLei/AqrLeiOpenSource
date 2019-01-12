@@ -12,8 +12,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 10
-        versionName "0.3.0"
+        versionCode 11
+        versionName "0.3.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -48,16 +48,16 @@ dependencies {
 
 }
 
-def siteUrl = 'https://github.com/AqrLei/OpenSource'
+def siteUrl = 'https://github.com/AqrLei/CustomViews'
 
-def gitUrl = 'https://github.com/AqrLei/OpenSource.git'
+def gitUrl = 'https://github.com/AqrLei/CustomViews.git'
 
 def libName = "customviews"
 
 
 group = "com.aqrlei.opensource"
 
-version = "0.3.0"
+version = "0.3.1"
 
 install {
     repositories.mavenInstaller {
@@ -83,7 +83,7 @@ install {
                     }
                 }
                 scm {
-                    connection "scm:git:git://github.com/AqrLei/OpenSource.git"
+                    connection "scm:git:git://github.com/AqrLei/CustomViews.git"
                     url siteUrl
                 }
             }
