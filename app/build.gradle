@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion buildVersion.compile
     defaultConfig {
         applicationId "open.aqrlei.com.opensource"
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion buildVersion.min
+        targetSdkVersion buildVersion.target
         versionCode 2
         versionName "0.2.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -41,7 +41,7 @@ dependencies {
     implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
     implementation deps.androidx.constraint
-    testImplementation deps.test.junit
-    androidTestImplementation deps.test.runner
-    androidTestImplementation deps.test.espresso
+    testImplementation deps.junit
+    androidTestImplementation deps.androidx.runner
+    androidTestImplementation deps.androidx.espresso
 }

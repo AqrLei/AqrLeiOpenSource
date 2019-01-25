@@ -7,11 +7,11 @@ plugins {
     id 'org.jetbrains.dokka-android'
 }
 android {
-    compileSdkVersion 28
+    compileSdkVersion buildVersion.compile
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion buildVersion.min
+        targetSdkVersion buildVersion.target
         versionCode 11
         versionName "0.3.1"
 
@@ -44,7 +44,7 @@ dependencies {
     implementation deps.androidx.appcompat
     implementation deps.androidx.constraint
     implementation deps.material
-    testImplementation deps.test.junit
+    testImplementation deps.junit
 
 }
 

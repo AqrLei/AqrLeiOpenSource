@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OpenSource</string>
+    <string name="app_name">CustomViews</string>
     <string-array name="dimension_text">
         <item>ceshi</item>
         <item>ceshi</item>
