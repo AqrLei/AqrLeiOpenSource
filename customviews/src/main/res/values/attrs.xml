@@ -7,7 +7,7 @@
         <!-- Reference to an bitmap -->
         <attr name="defaultBanner" format="reference" />
         <attr name="dotInterval" format="dimension" />
-        <attr name="dotBackground" format="integer" />
+        <attr name="dotBackgroundRes" format="integer" />
         <attr name="dotWidth" format="dimension" />
         <attr name="dotHeight" format="dimension" />
     </declare-styleable>

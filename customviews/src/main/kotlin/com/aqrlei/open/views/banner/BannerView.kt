@@ -2,13 +2,9 @@ package com.aqrlei.open.views.banner
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -29,7 +25,6 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     companion object {
         private val systemMetrics = Resources.getSystem().displayMetrics
         private val DOT_DEFAULT_SIZE = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, systemMetrics)
-        private val DEFAULT_DOT_BACKGROUND = ColorDrawable(Color.TRANSPARENT)
     }
 
     private val dotsView: LinearLayout = LinearLayout(context)
@@ -51,7 +46,7 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private var dotWidth = DOT_DEFAULT_SIZE
     private var dotHeight = DOT_DEFAULT_SIZE
 
-    private var dotBackground: Drawable = DEFAULT_DOT_BACKGROUND
+    private var dotBackgroundRes: Int = 0
     private val task = object : Runnable {
         override fun run() {
             if (count > 1) {
@@ -91,7 +86,7 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
             interval = getInteger(R.styleable.BannerView_interval, interval.toInt()).toLong()
             contentVp.background = getDrawable(R.styleable.BannerView_defaultBanner)
             dotInterval = getDimension(R.styleable.BannerView_dotInterval, dotInterval)
-            dotBackground = getDrawable(R.styleable.BannerView_dotBackground) ?: dotBackground
+            dotBackgroundRes = getResourceId(R.styleable.BannerView_dotBackgroundRes, dotBackgroundRes)
             dotWidth = getDimension(R.styleable.BannerView_dotWidth, dotWidth)
             dotHeight = getDimension(R.styleable.BannerView_dotHeight, dotHeight)
             recycle()
@@ -168,14 +163,8 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 parent.addView(v, -1, LinearLayout.LayoutParams(dotWidth.toInt(), dotHeight.toInt()).apply {
                     leftMargin = dotInterval.toInt()
                 })
-                //        v.setBackgroundResource(R.drawable.shape_banner_dot) 没问题
-                v.setBackground(dotBackground) //有问题
-//                val v = LayoutInflater.from(adapter.context).inflate(R.layout.layout_banner_dot, parent)
+                v.setBackgroundResource(dotBackgroundRes)
                 v.isEnabled = i != 0
-//                  with(v){
-//                      background = dotBackground
-//                      isEnabled = i != 0
-//                  }
             }
         }
     }
@@ -184,7 +173,7 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
             val context: Context,
             private val data: List<T>,
             private val bannerLayout: Int = R.layout.layout_default_banner) : PagerAdapter() {
-        // size+2,在首尾各加一个占位用于轮播
+        // size+2,由于ViewPager的缓存机制在首尾各加一个占位用于轮播
         override fun getCount() = if (data.size > 1) data.size + 2 else data.size
 
         override fun isViewFromObject(view: View, any: Any) = (any == view)
@@ -251,16 +240,10 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 count + 1 -> 0
                 else -> position - 1
             }
-
-            Log.d("fxYan", "${dotsView.childCount}")
-
             for (i in 0 until dotsView.childCount) {
                 val v = dotsView.getChildAt(i)
                 v.isEnabled = (index != i)
-                Log.d("fxYan", "${index != i}")
             }
-
-
         }
     }
 }

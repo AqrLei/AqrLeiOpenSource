@@ -16,7 +16,7 @@
         app:widthHeightRatio="2:1"
         app:layout_constraintBottom_toTopOf="@+id/refreshBanner"
         app:layout_constraintTop_toTopOf="parent"
-        app:dotBackground="@drawable/shape_banner_dot"
+        app:dotBackgroundRes="@drawable/shape_banner_dot"
         app:dotHeight="8dp"
         app:dotWidth="8dp"
         app:layout_constraintVertical_chainStyle="spread_inside" />
