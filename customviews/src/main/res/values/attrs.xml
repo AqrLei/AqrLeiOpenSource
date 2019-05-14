@@ -6,6 +6,10 @@
         <attr name="interval" format="integer" />
         <!-- Reference to an bitmap -->
         <attr name="defaultBanner" format="reference" />
+        <attr name="dotInterval" format="dimension" />
+        <attr name="dotBackground" format="integer" />
+        <attr name="dotWidth" format="dimension" />
+        <attr name="dotHeight" format="dimension" />
     </declare-styleable>
     <declare-styleable name="RoundBar">
         <attr name="roundBarBackgroundColor" format="color" />

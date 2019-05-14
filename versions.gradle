@@ -15,7 +15,7 @@ ext.addRepos = this.&addRepos
 ext.deps = [:]
 
 def buildVersion = [:]
-buildVersion.min = 16
+buildVersion.min = 18
 buildVersion.compile = 28
 buildVersion.target = 28
 

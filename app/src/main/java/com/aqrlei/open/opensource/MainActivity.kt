@@ -58,8 +58,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        bannerTest()
 
-        (window.decorView.findViewById<ViewGroup>(android.R.id.content)).run {
+       /* (window.decorView.findViewById<ViewGroup>(android.R.id.content)).run {
             addView(loadingViewGroup)
 
         }
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         removeTabListenerTv.setOnClickListener {
             labelTl.removeOnTabSelectedListener(listener)
             Toast.makeText(this, "remove done", Toast.LENGTH_SHORT).show()
-        }
+        }*/
     }
 
 
@@ -177,19 +178,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun bannerTest() {
         bannerCl.visibility = View.VISIBLE
-        val bannerList = ArrayList<Int>().apply { add(R.drawable.banner_zero) }
+        val bannerList = ArrayList<Int>().apply {
+            // add(R.drawable.banner_zero)
+             }
         refreshBanner.setOnClickListener {
             bannerList.addAll(listOf(R.drawable.banner_one, R.drawable.banner_two, R.drawable.banner_three, R.drawable.banner_four))
             banner.refresh()
         }
-        banner.setAdapterHolder(BannerViewAdapterHolder(BannerAdapter(
-                this,
-                bannerList
-        )))
+        banner.setAdapterWithHolder(BannerAdapter(this,bannerList))
+
     }
 
-    inner class BannerViewAdapterHolder(adapter: BannerView.BannerViewAdapter<Int>)
-        : BannerView.BannerViewAdapterHolder<Int>(adapter)
+
 
     class BannerAdapter(context: Context, data: List<Int>)
         : BannerView.BannerViewAdapter<Int>(context, data) {

@@ -12,10 +12,13 @@
         android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:defaultBanner="@drawable/no_banner"
-        app:isAuto="true"
+        app:isAuto="false"
+        app:widthHeightRatio="2:1"
         app:layout_constraintBottom_toTopOf="@+id/refreshBanner"
         app:layout_constraintTop_toTopOf="parent"
+        app:dotBackground="@drawable/shape_banner_dot"
+        app:dotHeight="8dp"
+        app:dotWidth="8dp"
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <Button
